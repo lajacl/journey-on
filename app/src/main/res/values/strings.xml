@@ -4,4 +4,10 @@
     <string name="title_search">Search</string>
     <string name="title_trips">Trips</string>
     <string name="title_profile">Profile</string>
+
+    <string name="search_option_blank">__________.</string>
+    <string name="search_locale">Take me to</string>
+    <string name="search_sight">I want to see the</string>
+    <string name="search_budget">Show me trips under $</string>
+    <string name="search_any">Surprise me with an adventure!</string>
 </resources>

@@ -1,7 +1,9 @@
 package com.lovelylavette.android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.google.android.libraries.places.api.Places;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,7 +52,18 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void updateNav() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        fragmentManager = getSupportFragmentManager();
+        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        resetNav();
+        Places.initialize(getApplicationContext(), BuildConfig.GoogleApiKey);
+    }
+
+    private void resetNav() {
         Fragment fragment = fragmentManager.findFragmentById(R.id.frag_container);
         if(fragment == null) {
             navView.setSelectedItemId(R.id.menu_dashboard);
@@ -56,14 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        fragmentManager = getSupportFragmentManager();
-        updateNav();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
-
 }

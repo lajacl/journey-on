@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@android:color/darker_gray"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".SearchFragment">
 
@@ -97,14 +101,17 @@
                 android:textSize="24sp"
                 android:textStyle="bold|italic"/>
 
-            <TextView
+            <EditText
                 android:id="@+id/search_budget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/search_option_blank"
                 android:layout_marginStart="5dp"
                 android:textSize="24sp"
-                android:textStyle="bold|italic"/>
+                android:textStyle="bold|italic"
+                android:inputType="number"
+                android:maxLength="4"
+                android:background="@android:color/transparent"
+                android:hint="@string/search_option_blank"/>
 
         </LinearLayout>
 

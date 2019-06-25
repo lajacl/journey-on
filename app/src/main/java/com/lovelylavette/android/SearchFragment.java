@@ -4,12 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.Status;
@@ -33,8 +38,12 @@ public class SearchFragment extends Fragment {
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
     private Context context;
 
+    @BindView(R.id.root_view)
+    LinearLayout rootView;
     @BindView(R.id.search_locale)
-    TextView locale;
+    TextView localeTextView;
+    @BindView(R.id.search_budget)
+    EditText budgetEditText;
 
 
     public SearchFragment() {
@@ -44,15 +53,28 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
-        addLocaleClickListener();
+        addRootViewFocusListener();
+        addLocaleSelectListener();
+        addBudgetChangeListener();
         return view;
     }
 
-    private void addLocaleClickListener() {
-        locale.setOnClickListener(v -> showAutocomplete());
+    private void addRootViewFocusListener() {
+        rootView.setOnFocusChangeListener((v, hasFocus) -> {
+            if(hasFocus)
+            {
+                InputMethodManager imm=(InputMethodManager) getActivity()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            }
+        });
     }
 
-    public void showAutocomplete() {
+    private void addLocaleSelectListener() {
+        localeTextView.setOnClickListener(v -> showAutocomplete());
+    }
+
+    private void showAutocomplete() {
         List<Place.Field> fields = Arrays.asList(Place.Field.NAME, Place.Field.LAT_LNG,
                 Place.Field.ADDRESS, Place.Field.TYPES);
 
@@ -61,6 +83,21 @@ public class SearchFragment extends Fragment {
                 .setTypeFilter(TypeFilter.CITIES)
                 .build(context);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    }
+
+    private void addBudgetChangeListener() {
+        budgetEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.i(TAG, s.toString());
+            }
+        });
     }
 
     @Override
@@ -72,8 +109,8 @@ public class SearchFragment extends Fragment {
                 Log.i(TAG, "Place Selected: " + place.toString());
                 SpannableString city = new SpannableString(place.getName());
                 city.setSpan(new UnderlineSpan(), 0, city.length(), 0);
-                locale.setText(city);
-                locale.append(".");
+                localeTextView.setText(city);
+                localeTextView.append(".");
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);

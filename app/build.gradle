@@ -10,6 +10,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GoogleApiKey", TranslatedTravel_GoogleApiKey)
+        buildConfigField("String", "AmadeusApiKey", TranslatedTravel_AmadeusApiKey)
+        buildConfigField("String", "AmadeusApiSecret", TranslatedTravel_AmadeusApiSecret)
     }
     buildTypes {
         release {
@@ -40,4 +42,6 @@ dependencies {
     implementation 'com.jakewharton:butterknife:9.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0'
     implementation 'com.google.android.libraries.places:places:1.1.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation "com.amadeus:amadeus-java:3.1.0"
 }

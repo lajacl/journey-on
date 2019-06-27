@@ -54,7 +54,7 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
         addRootViewFocusListener();
-        addLocaleSelectListener();
+        localeTextView.setOnClickListener(v -> showAutocomplete());
         addBudgetChangeListener();
         return view;
     }
@@ -68,21 +68,6 @@ public class SearchFragment extends Fragment {
                 imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
             }
         });
-    }
-
-    private void addLocaleSelectListener() {
-        localeTextView.setOnClickListener(v -> showAutocomplete());
-    }
-
-    private void showAutocomplete() {
-        List<Place.Field> fields = Arrays.asList(Place.Field.NAME, Place.Field.LAT_LNG,
-                Place.Field.ADDRESS, Place.Field.TYPES);
-
-        Intent intent = new Autocomplete.IntentBuilder(
-                AutocompleteActivityMode.OVERLAY, fields)
-                .setTypeFilter(TypeFilter.CITIES)
-                .build(context);
-        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }
 
     private void addBudgetChangeListener() {
@@ -100,14 +85,25 @@ public class SearchFragment extends Fragment {
         });
     }
 
+    private void showAutocomplete() {
+        List<Place.Field> fields = Arrays.asList(Place.Field.NAME, Place.Field.LAT_LNG,
+                Place.Field.ADDRESS, Place.Field.TYPES);
+
+        Intent intent = new Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.OVERLAY, fields)
+                .setTypeFilter(TypeFilter.CITIES)
+                .build(context);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Place Selected: " + place.toString());
-                SpannableString city = new SpannableString(place.getName());
+                Place destination = Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Place Selected: " + destination.toString());
+                SpannableString city = new SpannableString(destination.getName());
                 city.setSpan(new UnderlineSpan(), 0, city.length(), 0);
                 localeTextView.setText(city);
                 localeTextView.append(".");

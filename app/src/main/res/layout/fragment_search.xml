@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:minHeight="100dp"
         app:contentPadding="10dp"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/search_locale"
+            android:text="@string/option_locale"
             android:textSize="24sp"
             android:textStyle="bold|italic"/>
 
@@ -37,7 +37,7 @@
             android:id="@+id/search_locale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/search_option_blank"
+            android:text="@string/option_blank"
             android:layout_marginStart="5dp"
             android:textSize="24sp"
             android:textStyle="bold|italic"/>
@@ -52,7 +52,7 @@
         android:minHeight="100dp"
         android:layout_marginTop="16dp"
         app:contentPadding="10dp"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,7 +63,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/search_sight"
+                android:text="@string/option_sight"
                 android:textSize="24sp"
                 android:textStyle="bold|italic"/>
 
@@ -71,7 +71,7 @@
                 android:id="@+id/search_sight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/search_option_blank"
+                android:text="@string/option_blank"
                 android:layout_marginStart="5dp"
                 android:textSize="24sp"
                 android:textStyle="bold|italic"/>
@@ -86,7 +86,7 @@
         android:minHeight="100dp"
         android:layout_marginTop="16dp"
         app:contentPadding="10dp"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,7 +97,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/search_budget"
+                android:text="@string/option_budget"
                 android:textSize="24sp"
                 android:textStyle="bold|italic"/>
 
@@ -111,7 +111,7 @@
                 android:inputType="number"
                 android:maxLength="4"
                 android:background="@android:color/transparent"
-                android:hint="@string/search_option_blank"/>
+                android:hint="@string/option_blank"/>
 
         </LinearLayout>
 
@@ -123,7 +123,7 @@
         android:minHeight="100dp"
         android:layout_marginTop="16dp"
         app:contentPadding="10dp"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -134,7 +134,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/search_any"
+                android:text="@string/option_any"
                 android:textSize="24sp"
                 android:textStyle="bold|italic"/>
 

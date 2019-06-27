@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     messageText.setText(R.string.title_dashboard);
                     return true;
                 case R.id.menu_search:
-                    messageText.setText(R.string.title_search);
+                    messageText.setText(R.string.header_search);
                     ft.replace(R.id.frag_container, new SearchFragment());
                     ft.commit();
                     return true;

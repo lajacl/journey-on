@@ -11,7 +11,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".SearchFragment">
+    tools:context="fragment.SearchFragment">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -26,21 +26,21 @@
             android:orientation="horizontal"
             android:layout_gravity="center_vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/option_locale"
-            android:textSize="24sp"
-            android:textStyle="bold|italic"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/option_locale"
+                android:textSize="24sp"
+                android:textStyle="bold|italic"/>
 
-        <TextView
-            android:id="@+id/search_locale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/option_blank"
-            android:layout_marginStart="5dp"
-            android:textSize="24sp"
-            android:textStyle="bold|italic"/>
+            <TextView
+                android:id="@+id/search_locale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/option_blank"
+                android:layout_marginStart="5dp"
+                android:textSize="24sp"
+                android:textStyle="bold|italic"/>
 
         </LinearLayout>
 

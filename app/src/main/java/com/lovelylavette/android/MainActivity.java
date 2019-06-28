@@ -10,9 +10,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.google.android.libraries.places.api.Places;
+import com.lovelylavette.android.fragment.SearchFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,8 +20,6 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.nav_view)
     BottomNavigationView navView;
-    @BindView(R.id.message)
-    TextView messageText;
 
     FragmentManager fragmentManager;
 
@@ -34,18 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.menu_dashboard:
-                    messageText.setText(R.string.title_dashboard);
                     return true;
                 case R.id.menu_search:
-                    messageText.setText(R.string.header_search);
                     ft.replace(R.id.frag_container, new SearchFragment());
                     ft.commit();
                     return true;
                 case R.id.menu_trips:
-                    messageText.setText(R.string.title_trips);
                     return true;
                 case R.id.menu_profile:
-                    messageText.setText(R.string.title_profile);
                     return true;
             }
             return false;

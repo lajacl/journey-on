@@ -1,4 +1,4 @@
-package com.lovelylavette.android;
+package com.lovelylavette.android.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +23,7 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.lovelylavette.android.R;
 
 import java.util.Arrays;
 import java.util.List;

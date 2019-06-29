@@ -6,10 +6,10 @@
     <string name="title_profile">Profile</string>
 
     <string name="header_search">How does your journey begin?</string>
-
-    <string name="option_blank">__________.</string>
-    <string name="option_locale">Take me to</string>
-    <string name="option_sight">I want to see the</string>
-    <string name="option_budget">Show me trips under $</string>
+    <string name="option_blank">__________</string>
+    <string name="option_locale">I\'m traveling to</string>
+    <string name="option_sight">I want to see this sight:</string>
+    <string name="option_budget">My budget is $</string>
     <string name="option_any">Surprise me with an adventure!</string>
+    <string name="journey_on">Journey On</string>
 </resources>

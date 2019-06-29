@@ -1,144 +1,288 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@android:color/darker_gray"
+    style="@style/FragmentRoot"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="fragment.SearchFragment">
+    android:orientation="vertical"
+    tools:context=".fragment.SearchFragment">
+
+    <TextView
+        style="@style/HeaderQuestion"
+        android:text="@string/header_search" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="100dp"
-        app:contentPadding="10dp"
-        app:cardCornerRadius="2dp">
+        app:cardCornerRadius="2dp"
+        app:contentPadding="8dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/statement_locale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:text="@string/option_locale"
                 android:textSize="24sp"
-                android:textStyle="bold|italic"/>
+                android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/search_locale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/option_blank"
                 android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/statement_locale"
+                android:text="@string/option_blank"
+                android:textColor="@color/colorAccent"
                 android:textSize="24sp"
-                android:textStyle="bold|italic"/>
+                android:textStyle="bold|italic" />
 
-        </LinearLayout>
+            <View
+                android:id="@+id/divider_locale"
+                style="@style/HorizontalLine"
+                android:layout_below="@id/search_locale"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider_locale"
+                android:layout_alignParentEnd="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="0dp"
+                    android:text="@string/journey_on"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic" />
+
+                <ImageView
+                    android:id="@+id/next_locale"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_navigate_next"
+                    android:tint="@color/colorPrimary" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="100dp"
         android:layout_marginTop="16dp"
-        app:contentPadding="10dp"
-        app:cardCornerRadius="2dp">
+        android:minHeight="100dp"
+        app:cardCornerRadius="2dp"
+        app:contentPadding="10dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/statement_sight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:text="@string/option_sight"
                 android:textSize="24sp"
-                android:textStyle="bold|italic"/>
+                android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/search_sight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/option_blank"
                 android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/statement_sight"
+                android:text="@string/option_blank"
+                android:textColor="@color/colorAccent"
                 android:textSize="24sp"
-                android:textStyle="bold|italic"/>
+                android:textStyle="bold|italic" />
 
-        </LinearLayout>
+            <View
+                android:id="@+id/divider_sight"
+                style="@style/HorizontalLine"
+                android:layout_below="@id/search_sight"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider_sight"
+                android:layout_alignParentEnd="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="0dp"
+                    android:text="@string/journey_on"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic" />
+
+                <ImageView
+                    android:id="@+id/next_sight"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_navigate_next"
+                    android:tint="@color/colorPrimary" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="100dp"
         android:layout_marginTop="16dp"
-        app:contentPadding="10dp"
-        app:cardCornerRadius="2dp">
+        android:minHeight="100dp"
+        app:cardCornerRadius="2dp"
+        app:contentPadding="10dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/statement_budget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:text="@string/option_budget"
                 android:textSize="24sp"
-                android:textStyle="bold|italic"/>
+                android:textStyle="bold|italic" />
 
             <EditText
                 android:id="@+id/search_budget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:textSize="24sp"
-                android:textStyle="bold|italic"
+                android:layout_toEndOf="@id/statement_budget"
+                android:background="@android:color/transparent"
+                android:hint="@string/option_blank"
                 android:inputType="number"
                 android:maxLength="4"
-                android:background="@android:color/transparent"
-                android:hint="@string/option_blank"/>
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/colorAccent"
+                android:textSize="24sp"
+                android:textStyle="bold|italic" />
 
-        </LinearLayout>
+            <View
+                android:id="@+id/divider_budget"
+                style="@style/HorizontalLine"
+                android:layout_below="@id/search_budget"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider_budget"
+                android:layout_alignParentEnd="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="0dp"
+                    android:text="@string/journey_on"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic" />
+
+                <ImageView
+                    android:id="@+id/next_budget"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_navigate_next"
+                    android:tint="@color/colorPrimary" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="100dp"
         android:layout_marginTop="16dp"
-        app:contentPadding="10dp"
-        app:cardCornerRadius="2dp">
+        android:minHeight="100dp"
+        app:cardCornerRadius="2dp"
+        app:contentPadding="10dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/statement_any"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:text="@string/option_any"
                 android:textSize="24sp"
-                android:textStyle="bold|italic"/>
+                android:textStyle="bold|italic" />
 
-        </LinearLayout>
+            <View
+                android:id="@+id/divider_any"
+                style="@style/HorizontalLine"
+                android:layout_below="@id/statement_any"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider_any"
+                android:layout_alignParentEnd="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="0dp"
+                    android:text="@string/journey_on"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic" />
+
+                <ImageView
+                    android:id="@+id/next_any"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_navigate_next"
+                    android:tint="@color/colorPrimary" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 

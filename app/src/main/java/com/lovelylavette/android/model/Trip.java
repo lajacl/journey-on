@@ -5,6 +5,7 @@ import com.amadeus.resources.HotelOffer;
 import com.amadeus.resources.PointOfInterest;
 import com.google.android.libraries.places.api.model.Place;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -12,7 +13,7 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class Trip {
+public class Trip implements Serializable {
     private UUID id;
     private boolean flightNeeded;
     private boolean hotelNeeded;

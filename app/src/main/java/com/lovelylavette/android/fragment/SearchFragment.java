@@ -50,9 +50,9 @@ public class SearchFragment extends Fragment {
     EditText budgetEditText;
     @BindView(R.id.next_locale)
     ImageView localeNext;
-    @BindView(R.id.next_budget)
-    ImageView sightNext;
     @BindView(R.id.next_sight)
+    ImageView sightNext;
+    @BindView(R.id.next_budget)
     ImageView budgetNext;
     @BindView(R.id.next_any)
     ImageView anyNext;
@@ -99,10 +99,10 @@ public class SearchFragment extends Fragment {
                 int budget = s.toString().matches("[0-9]+") ? Integer.parseInt(s.toString()) : 0;
                 trip.setBudget(budget);
 
-                if (s.toString().equals("")) {
-                    Log.i(TAG, "Budget Empty");
+                if (budget > 0) {
+                    budgetNext.setVisibility(View.VISIBLE);
                 } else {
-                    Log.i(TAG, "Budget = $" + trip.getBudget());
+                    budgetNext.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -121,35 +121,14 @@ public class SearchFragment extends Fragment {
 
     private void addNextListeners() {
         View.OnClickListener nextListener = v -> {
-            switch (v.getId()) {
-                case R.id.next_locale:
-                    if (trip.getDestination() != null) {
-                        openNeeds();
-                    }
-                    break;
-                case R.id.next_sight:
-                    if (trip.getDestination() != null) {
-                        openNeeds();
-                    }
-                    break;
-                case R.id.next_budget:
-                    if (trip.getBudget() > 0) {
-                        openNeeds();
-                    }
-                    break;
-                case R.id.next_any:
-                    openNeeds();
-                    break;
-            }
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.frag_container, NeedsFragment.newInstance(trip)).addToBackStack(null).commit();
         };
 
         localeNext.setOnClickListener(nextListener);
         sightNext.setOnClickListener(nextListener);
         budgetNext.setOnClickListener(nextListener);
         anyNext.setOnClickListener(nextListener);
-    }
-
-    private void openNeeds() {
     }
 
     @Override
@@ -162,6 +141,7 @@ public class SearchFragment extends Fragment {
                 trip.setDestination(destination);
                 SpannableString city = getUnderlinedText(destination.getName());
                 localeTextView.setText(city);
+                localeNext.setVisibility(View.VISIBLE);
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);

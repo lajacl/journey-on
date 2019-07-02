@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/FragmentRoot"
+    android:orientation="vertical"
+    tools:context=".fragment.NeedsFragment">
+
+    <TextView
+        style="@style/HeaderQuestion"
+        android:text="@string/header_needs" />
+
+    <android.support.v7.widget.CardView
+        style="@style/CardItem"
+        app:contentPaddingBottom="25dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OptionText"
+                    android:drawableStart="@drawable/ic_flight"
+                    android:drawableTint="@color/colorAccent"
+                    android:text="@string/flight" />
+
+                <CheckBox style="@style/OptionCheckbox" />
+
+            </LinearLayout>
+
+            <View style="@style/HorizontalLine" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OptionText"
+                    android:drawableStart="@drawable/ic_hotel"
+                    android:drawableTint="@color/colorAccent"
+                    android:text="@string/hotel" />
+
+                <CheckBox style="@style/OptionCheckbox" />
+
+            </LinearLayout>
+
+            <View style="@style/HorizontalLine" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OptionText"
+                    android:drawableStart="@drawable/ic_place"
+                    android:drawableTint="@color/colorAccent"
+                    android:text="@string/sights" />
+
+                <CheckBox style="@style/OptionCheckbox" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

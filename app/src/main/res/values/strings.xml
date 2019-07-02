@@ -12,4 +12,9 @@
     <string name="option_budget">My budget is $</string>
     <string name="option_any">Surprise me with an adventure!</string>
     <string name="journey_on">Journey On</string>
+
+    <string name="header_needs">What does your journey need?</string>
+    <string name="flight">Flight</string>
+    <string name="hotel">Hotel</string>
+    <string name="sights">Places to Explore</string>
 </resources>

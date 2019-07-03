@@ -30,7 +30,9 @@
                     android:drawableTint="@color/colorAccent"
                     android:text="@string/flight" />
 
-                <CheckBox style="@style/OptionCheckbox" />
+                <CheckBox
+                    android:id="@+id/flight_cb"
+                    style="@style/OptionCheckbox" />
 
             </LinearLayout>
 
@@ -47,7 +49,9 @@
                     android:drawableTint="@color/colorAccent"
                     android:text="@string/hotel" />
 
-                <CheckBox style="@style/OptionCheckbox" />
+                <CheckBox
+                    android:id="@+id/hotel_cb"
+                    style="@style/OptionCheckbox" />
 
             </LinearLayout>
 
@@ -64,7 +68,9 @@
                     android:drawableTint="@color/colorAccent"
                     android:text="@string/sights" />
 
-                <CheckBox style="@style/OptionCheckbox" />
+                <CheckBox
+                    android:id="@+id/sights_cb"
+                    style="@style/OptionCheckbox" />
 
             </LinearLayout>
 

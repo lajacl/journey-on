@@ -17,4 +17,9 @@
     <string name="flight">Flight</string>
     <string name="hotel">Hotel</string>
     <string name="sights">Places to Explore</string>
+
+    <string name="header_flights">Fancy a flight?</string>
+    <string name="label_origin">From</string>
+    <string name="label_destination">To</string>
+    <string name="label_date">Select Date(s)</string>
 </resources>

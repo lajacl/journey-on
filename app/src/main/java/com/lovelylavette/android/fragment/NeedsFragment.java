@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 
 import com.lovelylavette.android.R;
 import com.lovelylavette.android.model.Trip;
@@ -27,6 +28,10 @@ public class NeedsFragment extends Fragment {
     CheckBox hotelCheckBox;
     @BindView(R.id.sights_cb)
     CheckBox sightsCheckBox;
+    @BindView(R.id.card_nav)
+    LinearLayout cardNav;
+    @BindView(R.id.next_link)
+    LinearLayout nextLink;
 
 
     public NeedsFragment() {
@@ -53,6 +58,7 @@ public class NeedsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_needs, container, false);
         ButterKnife.bind(this, view);
         addCheckedChangeListeners();
+        addNextOnClickListener();
         return view;
     }
 
@@ -69,11 +75,25 @@ public class NeedsFragment extends Fragment {
                     trip.setSightsNeeded(isChecked);
                     break;
             }
+
+            if(flightCheckBox.isChecked() || hotelCheckBox.isChecked() || sightsCheckBox.isChecked()
+                && cardNav.getVisibility() == View.GONE) {
+                cardNav.setVisibility(View.VISIBLE);
+            } else if(cardNav.getVisibility() == View.VISIBLE) {
+                cardNav.setVisibility(View.GONE);
+            }
+
             Log.i(TAG, trip.toString());
         };
 
         flightCheckBox.setOnCheckedChangeListener(checkedChangeListener);
         hotelCheckBox.setOnCheckedChangeListener(checkedChangeListener);
         sightsCheckBox.setOnCheckedChangeListener(checkedChangeListener);
+    }
+
+    private void addNextOnClickListener() {
+        nextLink.setOnClickListener(v -> getFragmentManager().beginTransaction()
+                .replace(R.id.frag_container, FlightsFragment.newInstance(trip))
+                .addToBackStack(null).commit());
     }
 }

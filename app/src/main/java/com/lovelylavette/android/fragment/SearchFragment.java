@@ -20,25 +20,20 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.lovelylavette.android.R;
+import com.lovelylavette.android.api.GooglePlacesApi;
 import com.lovelylavette.android.model.Trip;
-
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class SearchFragment extends Fragment {
     private static final String TAG = "SearchFragment";
-    private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
+    private static final int AUTOCOMPLETE_SEARCH_LOCALE_REQUEST_CODE = 1;
     private Context context;
     private Trip trip;
 
@@ -67,7 +62,7 @@ public class SearchFragment extends Fragment {
         ButterKnife.bind(this, view);
         trip = new Trip();
         addRootViewFocusListener();
-        localeTextView.setOnClickListener(v -> showAutocomplete());
+        localeTextView.setOnClickListener(v -> GooglePlacesApi.showAutocomplete(context, this, AUTOCOMPLETE_SEARCH_LOCALE_REQUEST_CODE));
         addBudgetChangeListener();
         addNextListeners();
         return view;
@@ -95,7 +90,6 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 int budget = s.toString().matches("[0-9]+") ? Integer.parseInt(s.toString()) : 0;
                 trip.setBudget(budget);
 
@@ -108,22 +102,10 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    private void showAutocomplete() {
-        List<Place.Field> fields = Arrays.asList(Place.Field.NAME, Place.Field.LAT_LNG,
-                Place.Field.ADDRESS, Place.Field.TYPES);
-
-        Intent intent = new Autocomplete.IntentBuilder(
-                AutocompleteActivityMode.OVERLAY, fields)
-                .setTypeFilter(TypeFilter.CITIES)
-                .build(context);
-        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
-    }
-
     private void addNextListeners() {
-        View.OnClickListener nextListener = v -> {
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.frag_container, NeedsFragment.newInstance(trip)).addToBackStack(null).commit();
-        };
+        View.OnClickListener nextListener = v -> getFragmentManager().beginTransaction()
+                .replace(R.id.frag_container, NeedsFragment.newInstance(trip))
+                .addToBackStack(null).commit();
 
         localeNext.setOnClickListener(nextListener);
         sightNext.setOnClickListener(nextListener);
@@ -134,20 +116,17 @@ public class SearchFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+        if (requestCode == AUTOCOMPLETE_SEARCH_LOCALE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place destination = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Place Selected: " + destination.toString());
                 trip.setDestination(destination);
+                Log.i(TAG, "Selected Place: " + destination.toString());
                 SpannableString city = getUnderlinedText(destination.getName());
                 localeTextView.setText(city);
                 localeNext.setVisibility(View.VISIBLE);
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Log.i(TAG, status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
             }
         }
     }

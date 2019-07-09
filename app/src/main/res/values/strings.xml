@@ -21,5 +21,7 @@
     <string name="header_flights">Fancy a flight?</string>
     <string name="label_origin">From</string>
     <string name="label_destination">To</string>
+    <string name="select_from">Select Origin</string>
+    <string name="select_to">Select Destination</string>
     <string name="label_date">Select Date(s)</string>
 </resources>

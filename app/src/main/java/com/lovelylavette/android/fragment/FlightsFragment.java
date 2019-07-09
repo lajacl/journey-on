@@ -13,11 +13,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.amadeus.resources.Location;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.lovelylavette.android.R;
+import com.lovelylavette.android.api.AmadeusApi;
 import com.lovelylavette.android.api.GooglePlacesApi;
 import com.lovelylavette.android.model.Trip;
 
@@ -35,11 +37,12 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     private static final int AUTOCOMPLETE_ORIGIN_REQUEST_CODE = 2;
     private static final int AUTOCOMPLETE_DESTINATION_REQUEST_CODE = 3;
     private static final String ARG_TRIP = "trip";
-    private static final String SELECT_PLACE = "[SEARCH BY CITY]";
+    private static final String SPINNER_PROMPT = "Where?";
+    private static final String SELECT_PLACE = "[ SEARCH BY CITY ]";
     private Context context;
     private Trip trip;
-    private List<String> originList = new ArrayList<>(Arrays.asList("Where?", SELECT_PLACE));
-    private List<String> destinationList = new ArrayList<>(Arrays.asList("Where?", SELECT_PLACE));
+    private List<String> originList = new ArrayList<>(Arrays.asList(SPINNER_PROMPT, SELECT_PLACE));
+    private List<String> destinationList = new ArrayList<>(Arrays.asList(SPINNER_PROMPT, SELECT_PLACE));
     private ArrayAdapter originAdapter;
     private ArrayAdapter destinationAdapter;
 
@@ -82,7 +85,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         destinationAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, destinationList);
 
         if(trip.getDestination() != null) {
-            updateSpinner(trip.getDestination(), destinationList, originAdapter, toSpinner);
+            getAirports(trip.getDestination(), "d");
         }
 
         originAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -123,7 +126,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
             Place origin = Autocomplete.getPlaceFromIntent(data);
             trip.setOrigin(origin);
             Log.i(TAG, "Selected Origin: " + origin.toString());
-            updateSpinner(origin, originList, originAdapter, fromSpinner);
+            getAirports(origin, "o");
         } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
             Status status = Autocomplete.getStatusFromIntent(data);
             Log.i(TAG, status.getStatusMessage());
@@ -137,20 +140,45 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
             Place destination = Autocomplete.getPlaceFromIntent(data);
             trip.setDestination(destination);
             Log.i(TAG, "Selected Destination: " + destination.toString());
-            updateSpinner(destination, destinationList, destinationAdapter, toSpinner);
+            getAirports(destination, "d");
         } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
             Status status = Autocomplete.getStatusFromIntent(data);
             Log.i(TAG, status.getStatusMessage());
         } else if (resultCode == AutocompleteActivity.RESULT_CANCELED) {
-        toSpinner.setSelection(0, true);
+            toSpinner.setSelection(0, true);
         }
     }
 
-    private void updateSpinner(Place place, List<String> placeList, ArrayAdapter placeAdapter, Spinner spinner) {
-        placeList.remove(0);
-        placeList.add(0, place.getAddress());
-        placeAdapter.notifyDataSetChanged();
-        spinner.setSelection(0);
+    private void getAirports(Place place, String placeType) {
+        AmadeusApi.findNearestRelevantAirports airportsCall =
+                new AmadeusApi.findNearestRelevantAirports();
+        airportsCall.setOnResponseListener(locations -> updateSpinner(locations, placeType));
+        airportsCall.execute(place.getLatLng());
+    }
+
+    private void updateSpinner(Location[] airportArray, String placeType) {
+        if(airportArray != null && airportArray.length >= 1) {
+            switch(placeType) {
+                case "o":
+                    addAirports(airportArray, originList, fromSpinner, originAdapter);
+                    break;
+                case "d":
+                    addAirports(airportArray, destinationList, toSpinner, destinationAdapter);
+                    break;
+            }
+        }
+    }
+
+    private void addAirports(Location[] airportArray, List<String> spinnerList, Spinner spinner, ArrayAdapter adapter) {
+        spinnerList.clear();
+        adapter.notifyDataSetChanged();
+        for(Location airport : airportArray) {
+            Log.i(TAG, airport.getIataCode() + " - " + airport.getDetailedName());
+            spinnerList.add(airport.getIataCode() + " - " + airport.getDetailedName());
+        }
+        spinnerList.add(SELECT_PLACE);
+        adapter.notifyDataSetChanged();
+        spinner.setSelection(0, true);
     }
 
     @Override

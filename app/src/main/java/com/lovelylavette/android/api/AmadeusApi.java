@@ -12,6 +12,7 @@ import com.amadeus.resources.Location;
 import com.amadeus.resources.PointOfInterest;
 import com.google.android.gms.maps.model.LatLng;
 import com.lovelylavette.android.BuildConfig;
+import com.lovelylavette.android.util.ResponseListener;
 
 public final class AmadeusApi {
     private static final String TAG = "AmadeusApi";
@@ -20,6 +21,11 @@ public final class AmadeusApi {
 
 
     public static final class findNearestRelevantAirports extends AsyncTask<LatLng, Void, Location[]> {
+        ResponseListener.Locations listener;
+
+        public void setOnResponseListener(ResponseListener.Locations listener) {
+            this.listener = listener;
+        }
 
         @Override
         protected Location[] doInBackground(LatLng... latLngs) {
@@ -28,7 +34,9 @@ public final class AmadeusApi {
             try {
                 airports = amadeus.referenceData.locations.airports.get(Params
                         .with("latitude", latLngs[0].latitude)
-                        .and("longitude", latLngs[0].longitude));
+                        .and("longitude", latLngs[0].longitude)
+                        .and("radius", 100)
+                        .and("page[limit]", 5));
 
             } catch (ResponseException e) {
                 e.printStackTrace();
@@ -40,7 +48,8 @@ public final class AmadeusApi {
         protected void onPostExecute(Location[] airports) {
             super.onPostExecute(airports);
             if(airports != null && airports.length > 0) {
-                Log.i(TAG, airports[0].toString());
+                Log.i(TAG, airports.length + " Airports Found");
+                listener.onResponseReceive(airports);
             }
         }
     }

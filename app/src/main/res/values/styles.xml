@@ -23,7 +23,7 @@
         <item name="contentPadding">10dp</item>
     </style>
 
-    <style name="HeaderQuestion">
+    <style name="Header">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>

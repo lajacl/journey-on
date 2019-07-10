@@ -11,7 +11,7 @@
     tools:context=".fragment.SearchFragment">
 
     <TextView
-        style="@style/HeaderQuestion"
+        style="@style/Header"
         android:text="@string/header_search" />
 
     <android.support.v7.widget.CardView

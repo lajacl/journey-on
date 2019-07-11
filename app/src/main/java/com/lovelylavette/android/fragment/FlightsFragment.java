@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.amadeus.resources.Location;
 import com.google.android.gms.common.api.Status;
@@ -23,9 +24,12 @@ import com.lovelylavette.android.api.AmadeusApi;
 import com.lovelylavette.android.api.GooglePlacesApi;
 import com.lovelylavette.android.model.Trip;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +54,8 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     Spinner fromSpinner;
     @BindView(R.id.to_spinner)
     Spinner toSpinner;
+    @BindView(R.id.date_text)
+    TextView dateTextView;
 
 
     public FlightsFragment() {
@@ -77,6 +83,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         View view = inflater.inflate(R.layout.fragment_flights, container, false);
         ButterKnife.bind(this, view);
         setupSpinners();
+        setupDate();
         return view;
     }
 
@@ -84,7 +91,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         originAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, originList);
         destinationAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, destinationList);
 
-        if(trip.getDestination() != null) {
+        if(trip != null && trip.getDestination() != null) {
             getAirports(trip.getDestination(), "d");
         }
 
@@ -96,6 +103,22 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
 
         fromSpinner.setOnItemSelectedListener(this);
         toSpinner.setOnItemSelectedListener(this);
+    }
+
+    private void setupDate() {
+        Calendar rightNow = Calendar.getInstance();
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+
+        dateTextView.setText(" " + formatDate(rightNow) + " - " + formatDate(tomorrow));
+        dateTextView.setOnClickListener(v -> {
+//                TODO show calendar date picker
+        });
+    }
+
+    private String formatDate(Calendar calendar) {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd", Locale.getDefault());
+        return sdf.format(calendar.getTime());
     }
 
     @Override

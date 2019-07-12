@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/FragmentRoot"
+    android:orientation="vertical"
+    tools:context=".fragment.DatePickerFragment">
+
+    <TextView
+        android:id="@+id/header_text"
+        style="@style/Header"
+        android:text="@string/flight_dates" />
+
+    <RadioGroup
+        android:id="@+id/flight_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:checkedButton="@id/round_trip_radio"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/round_trip_radio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/round_trip" />
+
+        <RadioButton
+            android:id="@+id/one_way_radio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/one_way" />
+
+    </RadioGroup>
+
+    <DatePicker
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white" />
+
+    <Button
+        android:id="@+id/apply_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="@string/apply" />
+
+</LinearLayout>

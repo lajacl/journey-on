@@ -25,4 +25,10 @@
     <string name="select_to">Select Destination</string>
     <string name="label_date">On</string>
     <string name="when">When?</string>
+
+    <string name="flight_dates">Select Flight Date(s)</string>
+    <string name="round_trip">Round Trip</string>
+    <string name="one_way">One Way</string>
+    <string name="apply">Apply</string>
+
 </resources>

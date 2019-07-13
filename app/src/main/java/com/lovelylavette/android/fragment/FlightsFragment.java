@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amadeus.resources.Location;
 import com.google.android.gms.common.api.Status;
@@ -41,6 +42,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     private static final int AUTOCOMPLETE_ORIGIN_REQUEST_CODE = 2;
     private static final int AUTOCOMPLETE_DESTINATION_REQUEST_CODE = 3;
     private static final String ARG_TRIP = "trip";
+    private static final String DATE_PATTERN = "EEE, MMM dd";
     private static final String SPINNER_PROMPT = "Where?";
     private static final String SELECT_PLACE = "[ SEARCH BY CITY ]";
     private Context context;
@@ -75,6 +77,8 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         if (getArguments() != null) {
             trip = (Trip) getArguments().getSerializable(ARG_TRIP);
             Log.i(TAG, trip.toString());
+        } else {
+            trip = new Trip();
         }
     }
 
@@ -110,14 +114,16 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         Calendar tomorrow = Calendar.getInstance();
         tomorrow.add(Calendar.DAY_OF_MONTH, 1);
 
-        dateTextView.setText(" " + formatDate(rightNow) + " - " + formatDate(tomorrow));
+        dateTextView.setText(String.format(" %s - %s", formatDate(rightNow), formatDate(tomorrow)));
         dateTextView.setOnClickListener(v -> {
-//                TODO show calendar date picker
+                    DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(trip);
+                    getFragmentManager().beginTransaction().replace(R.id.frag_container, datePickerFragment)
+                    .addToBackStack(null).commit();
         });
     }
 
     private String formatDate(Calendar calendar) {
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN, Locale.getDefault());
         return sdf.format(calendar.getTime());
     }
 
@@ -180,28 +186,32 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     }
 
     private void updateSpinner(Location[] airportArray, String placeType) {
-        if(airportArray != null && airportArray.length >= 1) {
+        if(airportArray != null) {
             switch(placeType) {
                 case "o":
-                    addAirports(airportArray, originList, fromSpinner, originAdapter);
+                    addAirports(airportArray, originList, originAdapter, fromSpinner);
                     break;
                 case "d":
-                    addAirports(airportArray, destinationList, toSpinner, destinationAdapter);
+                    addAirports(airportArray, destinationList, destinationAdapter, toSpinner);
                     break;
             }
         }
     }
 
-    private void addAirports(Location[] airportArray, List<String> spinnerList, Spinner spinner, ArrayAdapter adapter) {
-        spinnerList.clear();
-        adapter.notifyDataSetChanged();
-        for(Location airport : airportArray) {
-            Log.i(TAG, airport.getIataCode() + " - " + airport.getDetailedName());
-            spinnerList.add(airport.getIataCode() + " - " + airport.getDetailedName());
+    private void addAirports(Location[] airportArray, List<String> spinnerList, ArrayAdapter adapter, Spinner spinner) {
+        if (airportArray.length >= 1) {
+            spinnerList.clear();
+            for (Location airport : airportArray) {
+                Log.i(TAG, airport.getIataCode() + " - " + airport.getDetailedName());
+                spinnerList.add(airport.getIataCode() + " - " + airport.getDetailedName());
+            }
+            spinnerList.add(SELECT_PLACE);
+            adapter.notifyDataSetChanged();
+            spinner.setSelection(0, true);
+        } else {
+            spinner.setSelection(0);
+            Toast.makeText(context, R.string.no_airports, Toast.LENGTH_SHORT).show();
         }
-        spinnerList.add(SELECT_PLACE);
-        adapter.notifyDataSetChanged();
-        spinner.setSelection(0, true);
     }
 
     @Override

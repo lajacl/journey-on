@@ -23,6 +23,7 @@
     <string name="label_destination">To</string>
     <string name="select_from">Select Origin</string>
     <string name="select_to">Select Destination</string>
+    <string name="no_airports">No Airports Found</string>
     <string name="label_date">On</string>
     <string name="when">When?</string>
 

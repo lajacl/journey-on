@@ -47,9 +47,11 @@ public final class AmadeusApi {
         @Override
         protected void onPostExecute(Location[] airports) {
             super.onPostExecute(airports);
-            if(airports != null && airports.length > 0) {
+            if(airports != null) {
                 Log.i(TAG, airports.length + " Airports Found");
                 listener.onResponseReceive(airports);
+            } else {
+                Log.i(TAG, "Failed to get airport results");
             }
         }
     }

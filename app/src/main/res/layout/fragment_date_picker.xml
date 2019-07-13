@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/FragmentRoot"
     android:orientation="vertical"
@@ -34,10 +35,11 @@
 
     </RadioGroup>
 
-    <DatePicker
+    <com.squareup.timessquare.CalendarPickerView
+        android:id="@+id/calendar_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white" />
+        app:tsquare_titleTextColor="@color/colorAccent" />
 
     <Button
         android:id="@+id/apply_btn"

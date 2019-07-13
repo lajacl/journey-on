@@ -43,5 +43,17 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0'
     implementation 'com.google.android.libraries.places:places:1.1.0'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation "com.amadeus:amadeus-java:3.1.0"
+    implementation 'com.amadeus:amadeus-java:3.1.0'
+    implementation 'com.squareup:android-times-square:1.6.5@aar'
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '28.0.0'
+            }
+        }
+    }
 }

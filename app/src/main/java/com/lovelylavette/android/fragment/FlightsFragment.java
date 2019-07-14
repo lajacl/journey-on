@@ -41,6 +41,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     private static final String TAG = "FlightsFragment";
     private static final int AUTOCOMPLETE_ORIGIN_REQUEST_CODE = 2;
     private static final int AUTOCOMPLETE_DESTINATION_REQUEST_CODE = 3;
+    private static final int REQUEST_DATE = 0;
     private static final String ARG_TRIP = "trip";
     private static final String DATE_PATTERN = "EEE, MMM dd";
     private static final String SPINNER_PROMPT = "Where?";
@@ -110,16 +111,22 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     }
 
     private void setupDate() {
-        Calendar rightNow = Calendar.getInstance();
-        Calendar tomorrow = Calendar.getInstance();
-        tomorrow.add(Calendar.DAY_OF_MONTH, 1);
-
-        dateTextView.setText(String.format(" %s - %s", formatDate(rightNow), formatDate(tomorrow)));
+        displayDate();
         dateTextView.setOnClickListener(v -> {
                     DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(trip);
+                    datePickerFragment.setTargetFragment(FlightsFragment.this, REQUEST_DATE);
                     getFragmentManager().beginTransaction().replace(R.id.frag_container, datePickerFragment)
                     .addToBackStack(null).commit();
         });
+    }
+
+    private void displayDate() {
+        if (trip.isRoundTrip() && trip.getDepartureDate() !=null && trip.getReturnDate() != null) {
+            dateTextView.setText(String.format("%s - %s", formatDate(trip.getDepartureDate()),
+                    formatDate(trip.getReturnDate())));
+        } else if (!trip.isRoundTrip() && trip.getDepartureDate() != null) {
+            dateTextView.setText(String.format("%s", formatDate(trip.getDepartureDate())));
+        }
     }
 
     private String formatDate(Calendar calendar) {
@@ -147,6 +154,9 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
             processOriginResponse(resultCode, data);
         } else if (requestCode == AUTOCOMPLETE_DESTINATION_REQUEST_CODE) {
             processDestinationResponse(resultCode, data);
+        } else if (requestCode == REQUEST_DATE) {
+            trip = (Trip) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            displayDate();
         }
     }
 

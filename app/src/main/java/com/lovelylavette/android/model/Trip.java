@@ -22,7 +22,7 @@ public class Trip implements Serializable {
     private Place origin;
     private Place destination;
     private int numPlaneSeats;
-    private boolean roundTrip;
+    private boolean roundTrip = true;
     private Calendar departureDate;
     private Calendar returnDate;
     private int numHotelGuests;

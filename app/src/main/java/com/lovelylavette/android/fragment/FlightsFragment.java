@@ -5,22 +5,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amadeus.resources.FlightOffer;
 import com.amadeus.resources.Location;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.lovelylavette.android.R;
+import com.lovelylavette.android.adapter.FlightAdapter;
 import com.lovelylavette.android.api.AmadeusApi;
 import com.lovelylavette.android.api.GooglePlacesApi;
 import com.lovelylavette.android.model.Trip;
@@ -52,13 +59,24 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     private List<String> destinationList = new ArrayList<>(Arrays.asList(SPINNER_PROMPT, SELECT_PLACE));
     private ArrayAdapter originAdapter;
     private ArrayAdapter destinationAdapter;
+    private FlightAdapter flightAdapter;
 
+    @BindView(R.id.header)
+    TextView header;
+    @BindView(R.id.filter_card)
+    CardView filterCard;
     @BindView(R.id.from_spinner)
     Spinner fromSpinner;
     @BindView(R.id.to_spinner)
     Spinner toSpinner;
     @BindView(R.id.date_text)
     TextView dateTextView;
+    @BindView(R.id.search)
+    Button searchBtn;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+    @BindView(R.id.flight_recycler)
+    RecyclerView flightRecycler;
 
 
     public FlightsFragment() {
@@ -77,10 +95,10 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             trip = (Trip) getArguments().getSerializable(ARG_TRIP);
-            Log.i(TAG, trip.toString());
         } else {
             trip = new Trip();
         }
+        Log.i(TAG, trip.toString());
     }
 
     @Override
@@ -89,6 +107,10 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         ButterKnife.bind(this, view);
         setupSpinners();
         setupDate();
+        searchBtn.setOnClickListener(v -> getFlights());
+        setupRecycler();
+        setHeaderClickListener();
+        checkFlightData();
         return view;
     }
 
@@ -96,7 +118,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         originAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, originList);
         destinationAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, destinationList);
 
-        if(trip != null && trip.getDestination() != null) {
+        if (trip != null && trip.getDestination() != null) {
             getAirports(trip.getDestination(), "d");
         }
 
@@ -113,15 +135,15 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     private void setupDate() {
         displayDate();
         dateTextView.setOnClickListener(v -> {
-                    DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(trip);
-                    datePickerFragment.setTargetFragment(FlightsFragment.this, REQUEST_DATE);
-                    getFragmentManager().beginTransaction().replace(R.id.frag_container, datePickerFragment)
-                    .addToBackStack(null).commit();
+                DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(trip);
+                datePickerFragment.setTargetFragment(FlightsFragment.this, REQUEST_DATE);
+                getFragmentManager().beginTransaction().replace(R.id.frag_container, datePickerFragment)
+                .addToBackStack(null).commit();
         });
     }
 
     private void displayDate() {
-        if (trip.isRoundTrip() && trip.getDepartureDate() !=null && trip.getReturnDate() != null) {
+        if (trip.isRoundTrip() && trip.getDepartureDate() != null && trip.getReturnDate() != null) {
             dateTextView.setText(String.format("%s - %s", formatDate(trip.getDepartureDate()),
                     formatDate(trip.getReturnDate())));
         } else if (!trip.isRoundTrip() && trip.getDepartureDate() != null) {
@@ -134,12 +156,42 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         return sdf.format(calendar.getTime());
     }
 
+    private void setupRecycler() {
+        flightRecycler.setHasFixedSize(true);
+        flightRecycler.setLayoutManager(new LinearLayoutManager(context));
+        flightAdapter = new FlightAdapter(new FlightOffer[]{});
+        flightRecycler.setAdapter(flightAdapter);
+    }
+
+    private void setHeaderClickListener() {
+        header.setOnClickListener(v -> {
+            if(filterCard.getVisibility() == View.VISIBLE && flightAdapter.getItemCount() >= 1) {
+                filterCard.setVisibility(View.GONE);
+            } else {
+                filterCard.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String oldAirport;
         if (parent.getId() == R.id.from_spinner && position == parent.getCount() - 1) {
             GooglePlacesApi.showAutocomplete(context, this, AUTOCOMPLETE_ORIGIN_REQUEST_CODE);
         } else if (parent.getId() == R.id.to_spinner && position == parent.getCount() - 1) {
             GooglePlacesApi.showAutocomplete(context, this, AUTOCOMPLETE_DESTINATION_REQUEST_CODE);
+        } else if (parent.getId() == R.id.from_spinner && position != parent.getCount() - 1) {
+            oldAirport = trip.getOriginAirport();
+            trip.setOriginAirport(originList.get(position).split(" - ")[0]);
+            if(!trip.getOriginAirport().equals(oldAirport)) {
+                checkFlightData();
+            }
+        } else if (parent.getId() == R.id.to_spinner && position != parent.getCount() - 1) {
+            oldAirport = trip.getDestinationAirport();
+            trip.setDestinationAirport(destinationList.get(position).split(" - ")[0]);
+            if(!trip.getOriginAirport().equals(oldAirport)) {
+                checkFlightData();
+            }
         }
     }
 
@@ -157,6 +209,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         } else if (requestCode == REQUEST_DATE) {
             trip = (Trip) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             displayDate();
+            checkFlightData();
         }
     }
 
@@ -191,37 +244,91 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     private void getAirports(Place place, String placeType) {
         AmadeusApi.findNearestRelevantAirports airportsCall =
                 new AmadeusApi.findNearestRelevantAirports();
-        airportsCall.setOnResponseListener(locations -> updateSpinner(locations, placeType));
+        airportsCall.setOnResponseListener(locations -> {
+
+            if (locations == null) {
+                Toast.makeText(context, R.string.fail_airports, Toast.LENGTH_SHORT).show();
+                switch (placeType) {
+                    case "o":
+                        fromSpinner.setSelection(0);
+                        break;
+                    case "d":
+                        toSpinner.setSelection(0);
+                        break;
+                }
+            } else if (locations.length == 0) {
+                Toast.makeText(context, R.string.no_airports, Toast.LENGTH_SHORT).show();
+            } else {
+                Log.i(TAG, locations.length + " Airports Found");
+                updateSpinner(locations, placeType);
+            }
+        });
         airportsCall.execute(place.getLatLng());
+
     }
 
     private void updateSpinner(Location[] airportArray, String placeType) {
-        if(airportArray != null) {
-            switch(placeType) {
-                case "o":
-                    addAirports(airportArray, originList, originAdapter, fromSpinner);
-                    break;
-                case "d":
-                    addAirports(airportArray, destinationList, destinationAdapter, toSpinner);
-                    break;
-            }
+        String oldAirport;
+        switch (placeType) {
+            case "o":
+                oldAirport = trip.getOriginAirport();
+                addAirports(airportArray, originList, originAdapter, fromSpinner);
+                trip.setOriginAirport(airportArray[0].getIataCode());
+                if(!trip.getOriginAirport().equals(oldAirport)) {
+                    checkFlightData();
+                }
+                break;
+            case "d":
+                oldAirport = trip.getDestinationAirport();
+                addAirports(airportArray, destinationList, destinationAdapter, toSpinner);
+                trip.setDestinationAirport(airportArray[0].getIataCode());
+                if(!trip.getDestinationAirport().equals(oldAirport)) {
+                    checkFlightData();
+                }
+                break;
         }
     }
 
     private void addAirports(Location[] airportArray, List<String> spinnerList, ArrayAdapter adapter, Spinner spinner) {
-        if (airportArray.length >= 1) {
-            spinnerList.clear();
-            for (Location airport : airportArray) {
-                Log.i(TAG, airport.getIataCode() + " - " + airport.getDetailedName());
-                spinnerList.add(airport.getIataCode() + " - " + airport.getDetailedName());
-            }
-            spinnerList.add(SELECT_PLACE);
-            adapter.notifyDataSetChanged();
-            spinner.setSelection(0, true);
-        } else {
-            spinner.setSelection(0);
-            Toast.makeText(context, R.string.no_airports, Toast.LENGTH_SHORT).show();
+        spinnerList.clear();
+        for (Location airport : airportArray) {
+            Log.i(TAG, airport.getIataCode() + " - " + airport.getDetailedName());
+            spinnerList.add(airport.getIataCode() + " - " + airport.getDetailedName());
         }
+        spinnerList.add(SELECT_PLACE);
+        adapter.notifyDataSetChanged();
+        spinner.setSelection(0, true);
+    }
+
+    private void checkFlightData() {
+        if (trip.getOriginAirport() != null && trip.getDestinationAirport() != null &&
+                trip.getDepartureDate() != null) {
+            searchBtn.setVisibility(View.VISIBLE);
+        } else {
+            searchBtn.setVisibility(View.GONE);
+        }
+    }
+
+    private void getFlights() {
+        searchBtn.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        AmadeusApi.findLowFareFlights flightsCall =
+                new AmadeusApi.findLowFareFlights();
+
+        flightsCall.setOnResponseListener(flightOffers -> {
+            progressBar.setVisibility(View.GONE);
+
+            if (flightOffers == null || flightOffers.length == 0) {
+                flightAdapter.updateData(new FlightOffer[]{});
+                Toast.makeText(context, R.string.no_flights, Toast.LENGTH_SHORT).show();
+            } else {
+                Log.i(TAG, flightOffers.length + " Flight Offers Found");
+                filterCard.setVisibility(View.GONE);
+                flightAdapter.updateData(flightOffers);
+            }
+        });
+
+        flightsCall.execute(trip);
     }
 
     @Override

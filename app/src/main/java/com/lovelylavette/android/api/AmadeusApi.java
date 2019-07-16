@@ -6,13 +6,18 @@ import android.util.Log;
 import com.amadeus.Amadeus;
 import com.amadeus.Params;
 import com.amadeus.exceptions.ResponseException;
+import com.amadeus.resources.Airline;
 import com.amadeus.resources.FlightOffer;
 import com.amadeus.resources.HotelOffer;
 import com.amadeus.resources.Location;
 import com.amadeus.resources.PointOfInterest;
 import com.google.android.gms.maps.model.LatLng;
 import com.lovelylavette.android.BuildConfig;
+import com.lovelylavette.android.model.Trip;
 import com.lovelylavette.android.util.ResponseListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public final class AmadeusApi {
     private static final String TAG = "AmadeusApi";
@@ -47,27 +52,30 @@ public final class AmadeusApi {
         @Override
         protected void onPostExecute(Location[] airports) {
             super.onPostExecute(airports);
-            if(airports != null) {
-                Log.i(TAG, airports.length + " Airports Found");
-                listener.onResponseReceive(airports);
-            } else {
-                Log.i(TAG, "Failed to get airport results");
-            }
+            listener.onResponseReceive(airports);
         }
     }
 
-    public static final class findLowFareFlights extends AsyncTask<Location, Void, FlightOffer[]> {
+    public static final class findLowFareFlights extends AsyncTask<Trip, Void, FlightOffer[]> {
+        ResponseListener.FlightOffer listener;
+
+        public void setOnResponseListener(ResponseListener.FlightOffer listener) {
+            this.listener = listener;
+        }
 
         @Override
-        protected FlightOffer[] doInBackground(Location... locations) {
+        protected FlightOffer[] doInBackground(Trip... trips) {
             FlightOffer[] flightOffers = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd", Locale.getDefault());
 
             try {
+                Trip trip = trips[0];
                 flightOffers = amadeus.shopping.flightOffers.get(Params
-                        .with("origin", "ATL")
-                        .and("destination", (locations[0].getIataCode()))
-                        .and("departureDate", "2019-08-30")
-                        .and("returnDate", "2019-09-29"));
+                        .with("origin", trip.getOriginAirport())
+                        .and("destination", trip.getDestinationAirport())
+                        .and("nonStop", true)
+                        .and("departureDate", sdf.format(trip.getDepartureDate().getTime()))
+                        .and("currency", "USD"));
 
             } catch (ResponseException e) {
                 e.printStackTrace();
@@ -78,9 +86,36 @@ public final class AmadeusApi {
         @Override
         protected void onPostExecute(FlightOffer[] flightOffers) {
             super.onPostExecute(flightOffers);
-            if(flightOffers != null && flightOffers.length > 0) {
-                Log.i(TAG, flightOffers[0].toString());
+            listener.onResponseReceive(flightOffers);
+        }
+    }
+
+    public static final class findAirlines extends AsyncTask<String, Void, Airline[]> {
+        ResponseListener.Airlines listener;
+
+        public void setOnResponseListener(ResponseListener.Airlines listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        protected Airline[] doInBackground(String... strings) {
+            Airline[] airlines = null;
+
+            try {
+                String airlineString = strings[0];
+                airlines = amadeus.referenceData.airlines.get(Params
+                        .with("airlineCodes", airlineString));
+
+            } catch (ResponseException e) {
+                e.printStackTrace();
             }
+            return airlines;
+        }
+
+        @Override
+        protected void onPostExecute(Airline[] airlines) {
+            super.onPostExecute(airlines);
+            listener.onResponseReceive(airlines);
         }
     }
 

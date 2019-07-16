@@ -23,9 +23,12 @@
     <string name="label_destination">To</string>
     <string name="select_from">Select Origin</string>
     <string name="select_to">Select Destination</string>
+    <string name="fail_airports">Failed to get Airports</string>
     <string name="no_airports">No Airports Found</string>
     <string name="label_date">On</string>
     <string name="when">When?</string>
+    <string name="no_flights">No Flights Found</string>
+    <string name="nonstop">Nonstop</string>
 
     <string name="flight_dates">Select Flight Date(s)</string>
     <string name="round_trip">Round Trip</string>

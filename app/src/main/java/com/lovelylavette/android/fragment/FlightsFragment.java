@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import com.lovelylavette.android.adapter.FlightAdapter;
 import com.lovelylavette.android.api.AmadeusApi;
 import com.lovelylavette.android.api.GooglePlacesApi;
 import com.lovelylavette.android.model.Trip;
+import com.lovelylavette.android.util.ResponseListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ import butterknife.ButterKnife;
 
 import static android.app.Activity.RESULT_OK;
 
-public class FlightsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class FlightsFragment extends Fragment implements AdapterView.OnItemSelectedListener, ResponseListener.FlightOffer {
     private static final String TAG = "FlightsFragment";
     private static final int AUTOCOMPLETE_ORIGIN_REQUEST_CODE = 2;
     private static final int AUTOCOMPLETE_DESTINATION_REQUEST_CODE = 3;
@@ -61,8 +63,8 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     private ArrayAdapter destinationAdapter;
     private FlightAdapter flightAdapter;
 
-    @BindView(R.id.header)
-    TextView header;
+    @BindView(R.id.expand)
+    ImageView expandFilter;
     @BindView(R.id.filter_card)
     CardView filterCard;
     @BindView(R.id.from_spinner)
@@ -77,6 +79,8 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     ProgressBar progressBar;
     @BindView(R.id.flight_recycler)
     RecyclerView flightRecycler;
+    @BindView(R.id.next_btn)
+    Button nextBtn;
 
 
     public FlightsFragment() {
@@ -109,7 +113,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         setupDate();
         searchBtn.setOnClickListener(v -> getFlights());
         setupRecycler();
-        setHeaderClickListener();
+        setExpandFilterClickListener();
         checkFlightData();
         return view;
     }
@@ -159,16 +163,18 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     private void setupRecycler() {
         flightRecycler.setHasFixedSize(true);
         flightRecycler.setLayoutManager(new LinearLayoutManager(context));
-        flightAdapter = new FlightAdapter(new FlightOffer[]{});
+        flightAdapter = new FlightAdapter(new FlightOffer[]{}, this, getResources());
         flightRecycler.setAdapter(flightAdapter);
     }
 
-    private void setHeaderClickListener() {
-        header.setOnClickListener(v -> {
+    private void setExpandFilterClickListener() {
+        expandFilter.setOnClickListener(v -> {
             if(filterCard.getVisibility() == View.VISIBLE && flightAdapter.getItemCount() >= 1) {
                 filterCard.setVisibility(View.GONE);
+                expandFilter.setImageResource(R.drawable.ic_expand_more);
             } else {
                 filterCard.setVisibility(View.VISIBLE);
+                expandFilter.setImageResource(R.drawable.ic_expand_less);
             }
         });
     }
@@ -246,8 +252,8 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
                 new AmadeusApi.findNearestRelevantAirports();
         airportsCall.setOnResponseListener(locations -> {
 
-            if (locations == null) {
-                Toast.makeText(context, R.string.fail_airports, Toast.LENGTH_SHORT).show();
+            if (locations == null || locations.length == 0) {
+                Toast.makeText(context, R.string.no_airports, Toast.LENGTH_SHORT).show();
                 switch (placeType) {
                     case "o":
                         fromSpinner.setSelection(0);
@@ -256,8 +262,6 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
                         toSpinner.setSelection(0);
                         break;
                 }
-            } else if (locations.length == 0) {
-                Toast.makeText(context, R.string.no_airports, Toast.LENGTH_SHORT).show();
             } else {
                 Log.i(TAG, locations.length + " Airports Found");
                 updateSpinner(locations, placeType);
@@ -320,15 +324,24 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
 
             if (flightOffers == null || flightOffers.length == 0) {
                 flightAdapter.updateData(new FlightOffer[]{});
+                expandFilter.setVisibility(View.GONE);
                 Toast.makeText(context, R.string.no_flights, Toast.LENGTH_SHORT).show();
             } else {
                 Log.i(TAG, flightOffers.length + " Flight Offers Found");
                 filterCard.setVisibility(View.GONE);
                 flightAdapter.updateData(flightOffers);
+                expandFilter.setVisibility(View.VISIBLE);
             }
         });
 
         flightsCall.execute(trip);
+    }
+
+    @Override
+    public void onResponseReceive(FlightOffer flightOffer) {
+        trip.setFlight(flightOffer);
+        nextBtn.setVisibility(flightOffer == null ? View.GONE : View.VISIBLE);
+        Toast.makeText(context, "Flight Selected", Toast.LENGTH_SHORT).show();
     }
 
     @Override

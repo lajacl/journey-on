@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
+    <color name="gray">#CCCCCC</color>
+
     <!--com.squareup.timessquare.CalendarPickerView-->
     <!--<color name="calendar_active_month_bg">#fff5f7f9</color>-->
     <!--<color name="calendar_bg">#ffffffff</color>-->

@@ -57,9 +57,9 @@ public final class AmadeusApi {
     }
 
     public static final class findLowFareFlights extends AsyncTask<Trip, Void, FlightOffer[]> {
-        ResponseListener.FlightOffer listener;
+        ResponseListener.FlightOffers listener;
 
-        public void setOnResponseListener(ResponseListener.FlightOffer listener) {
+        public void setOnResponseListener(ResponseListener.FlightOffers listener) {
             this.listener = listener;
         }
 
@@ -70,12 +70,25 @@ public final class AmadeusApi {
 
             try {
                 Trip trip = trips[0];
-                flightOffers = amadeus.shopping.flightOffers.get(Params
-                        .with("origin", trip.getOriginAirport())
+
+                Params params = Params.with("origin", trip.getOriginAirport())
                         .and("destination", trip.getDestinationAirport())
-                        .and("nonStop", true)
                         .and("departureDate", sdf.format(trip.getDepartureDate().getTime()))
-                        .and("currency", "USD"));
+                        .and("currency", "USD");
+
+                if(trip.isRoundTrip()) {
+                    params.and("returnDate", sdf.format(trip.getReturnDate().getTime()));
+                }
+
+//                TODO Add option for nonstop flights only
+                /*if(trip.flightNonstop) {
+                    params.and("nonStop", true);
+                }*/
+
+                flightOffers = amadeus.shopping.flightOffers.get(params);
+
+                //TODO Add pagination
+                 /*FlightOffer[] flightOffersNext = (FlightOffer[])amadeus.next(flightOffers[0]);*/
 
             } catch (ResponseException e) {
                 e.printStackTrace();

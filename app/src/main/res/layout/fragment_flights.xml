@@ -6,9 +6,17 @@
     tools:context=".fragment.FlightsFragment">
 
     <TextView
-        android:id="@+id/header"
         style="@style/Header"
         android:text="@string/header_flights" />
+
+    <ImageView
+        android:id="@+id/expand"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="end"
+        android:src="@drawable/ic_expand_more"
+        android:tint="@color/colorAccent"
+        android:visibility="gone" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/filter_card"
@@ -78,9 +86,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@color/colorAccent"
-        android:drawableStart="@drawable/ic_flight"
-        android:padding="8dp"
-        android:text="@string/title_search" />
+        android:drawableEnd="@drawable/ic_flight"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:text="@string/title_search"
+        android:textColor="@android:color/white" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -93,5 +102,18 @@
         android:id="@+id/flight_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/next_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/white"
+        android:padding="8dp"
+        android:text="@string/journey_on"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone" />
 
 </LinearLayout>

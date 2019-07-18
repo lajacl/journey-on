@@ -23,6 +23,7 @@ public final class AmadeusApi {
     private static final String TAG = "AmadeusApi";
     private static final Amadeus amadeus = Amadeus.builder(BuildConfig.AmadeusApiKey,
             BuildConfig.AmadeusApiSecret).build();
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd", Locale.getDefault());
 
 
     public static final class findNearestRelevantAirports extends AsyncTask<LatLng, Void, Location[]> {
@@ -66,7 +67,6 @@ public final class AmadeusApi {
         @Override
         protected FlightOffer[] doInBackground(Trip... trips) {
             FlightOffer[] flightOffers = null;
-            SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd", Locale.getDefault());
 
             try {
                 Trip trip = trips[0];
@@ -132,18 +132,27 @@ public final class AmadeusApi {
         }
     }
 
-    public static final class findHotels extends AsyncTask<LatLng, Void, HotelOffer[]> {
+    public static final class findHotels extends AsyncTask<Trip, Void, HotelOffer[]> {
+        ResponseListener.HotelOffers listener;
+
+        public void setOnResponseListener(ResponseListener.HotelOffers listener) {
+            this.listener = listener;
+        }
 
         @Override
-        protected HotelOffer[] doInBackground(LatLng... latLngs) {
+        protected HotelOffer[] doInBackground(Trip... trips) {
             HotelOffer[] hotelOffers = null;
 
             try {
+                Trip trip = trips[0];
+                LatLng latlng = trip.getDestination().getLatLng();
+
                 hotelOffers = amadeus.shopping.hotelOffers.get(Params
-                        .with("latitude", latLngs[0].latitude)
-                        .and("longitude", latLngs[0].longitude)
-                        .and("checkInDate", "2019-08-30")
-                        .and("checkOutDate", "2019-09-29"));
+                        .with("latitude", latlng.latitude)
+                        .and("longitude", latlng.longitude)
+                        .and("checkInDate", sdf.format(trip.getDepartureDate().getTime()))
+                        .and("checkOutDate", sdf.format(trip.getReturnDate().getTime()))
+                        .and("currency", "USD"));
 
             } catch (ResponseException e) {
                 e.printStackTrace();
@@ -154,9 +163,7 @@ public final class AmadeusApi {
         @Override
         protected void onPostExecute(HotelOffer[] hotelOffers) {
             super.onPostExecute(hotelOffers);
-            if(hotelOffers != null && hotelOffers.length > 0) {
-                Log.i(TAG, hotelOffers[0].toString());
-            }
+            listener.onResponseReceive(hotelOffers);
         }
     }
 

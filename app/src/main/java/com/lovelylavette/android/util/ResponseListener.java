@@ -1,6 +1,5 @@
 package com.lovelylavette.android.util;
 
-import com.amadeus.resources.FlightOffer;
 import com.amadeus.resources.Location;
 
 public class ResponseListener {
@@ -17,7 +16,15 @@ public class ResponseListener {
         void onResponseReceive(com.amadeus.resources.Airline[] airlines);
     }
 
+    public interface HotelOffers {
+        void onResponseReceive(com.amadeus.resources.HotelOffer[] hotelOffers);
+    }
+
     public interface FlightOffer {
         void onResponseReceive(com.amadeus.resources.FlightOffer flightOffer);
+    }
+
+    public interface HotelOffer {
+        void onResponseReceive(com.amadeus.resources.HotelOffer hotelOffer);
     }
 }

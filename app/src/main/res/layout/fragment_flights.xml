@@ -89,7 +89,8 @@
         android:drawableEnd="@drawable/ic_flight"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/title_search"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

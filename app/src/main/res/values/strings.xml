@@ -29,6 +29,11 @@
     <string name="no_flights">No Flights Found</string>
     <string name="nonstop">Nonstop</string>
 
+    <string name="header_hotels">Where to lay your head?</string>
+    <string name="label_in">In</string>
+    <string name="no_hotels">No Hotels Found</string>
+    <string name="amenities">Amenities:</string>
+
     <string name="flight_dates">Select Flight Date(s)</string>
     <string name="round_trip">Round Trip</string>
     <string name="one_way">One Way</string>

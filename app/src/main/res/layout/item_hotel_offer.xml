@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/offer_card"
+    style="@style/CardItem"
+    android:layout_margin="8dp"
+    android:background="@color/colorPrimary">
+
+    <LinearLayout
+        android:id="@+id/offer_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            tools:text="DT BY HILTON ATLANTA DOWNTOWN" />
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="160 SPRING STREET NW, ATLANTA, GA, US 30303" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                tools:text="$389.32 total" />
+
+            <TextView
+                android:id="@+id/room_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textStyle="bold"
+                tools:text="STANDARD_ROOM" />
+
+        </LinearLayout>
+
+        <View style="@style/HorizontalLine" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="@string/amenities" />
+
+        <TextView
+            android:id="@+id/amenities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="BUSINESS_CENTER, MEETING_ROOMS, RESTAURANT, DIS_PARKG, ADAPTED_PHONES, WIDE_ENTRANCE, WIDE_CORRIDORS, GIFT_SHOP, LAUNDRY_SVC, VALET_PARKING, SWIMMING_POOL, AIR_CONDITIONING, HAIR_DRYER, MOVIE_CHANNELS, PHONE-DIR_DIAL, TELEVISION" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

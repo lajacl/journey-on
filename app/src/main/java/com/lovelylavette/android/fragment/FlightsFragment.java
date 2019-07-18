@@ -32,14 +32,12 @@ import com.lovelylavette.android.adapter.FlightAdapter;
 import com.lovelylavette.android.api.AmadeusApi;
 import com.lovelylavette.android.api.GooglePlacesApi;
 import com.lovelylavette.android.model.Trip;
+import com.lovelylavette.android.util.DateUtils;
 import com.lovelylavette.android.util.ResponseListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,7 +50,6 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     private static final int AUTOCOMPLETE_DESTINATION_REQUEST_CODE = 3;
     private static final int REQUEST_DATE = 0;
     private static final String ARG_TRIP = "trip";
-    private static final String DATE_PATTERN = "EEE, MMM dd";
     private static final String SPINNER_PROMPT = "Where?";
     private static final String SELECT_PLACE = "[ SEARCH BY CITY ]";
     private Context context;
@@ -115,6 +112,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         setupRecycler();
         setExpandFilterClickListener();
         checkFlightData();
+        setNextBtnOnClickListener();
         return view;
     }
 
@@ -122,7 +120,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         originAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, originList);
         destinationAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, destinationList);
 
-        if (trip != null && trip.getDestination() != null) {
+        if (trip != null && trip.getDestination() != null && trip.getDestinationAirport() == null) {
             getAirports(trip.getDestination(), "d");
         }
 
@@ -139,25 +137,19 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     private void setupDate() {
         displayDate();
         dateTextView.setOnClickListener(v -> {
-                DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(trip);
-                datePickerFragment.setTargetFragment(FlightsFragment.this, REQUEST_DATE);
-                getFragmentManager().beginTransaction().replace(R.id.frag_container, datePickerFragment)
-                .addToBackStack(null).commit();
+            DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(trip);
+            datePickerFragment.setTargetFragment(FlightsFragment.this, REQUEST_DATE);
+            getFragmentManager().beginTransaction().replace(R.id.frag_container, datePickerFragment)
+                    .addToBackStack(null).commit();
         });
     }
 
     private void displayDate() {
         if (trip.isRoundTrip() && trip.getDepartureDate() != null && trip.getReturnDate() != null) {
-            dateTextView.setText(String.format("%s - %s", formatDate(trip.getDepartureDate()),
-                    formatDate(trip.getReturnDate())));
+            dateTextView.setText(DateUtils.getFormattedRange(trip.getDepartureDate(), trip.getReturnDate()));
         } else if (!trip.isRoundTrip() && trip.getDepartureDate() != null) {
-            dateTextView.setText(String.format("%s", formatDate(trip.getDepartureDate())));
+            dateTextView.setText(DateUtils.getFormattedDate(trip.getDepartureDate()));
         }
-    }
-
-    private String formatDate(Calendar calendar) {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN, Locale.getDefault());
-        return sdf.format(calendar.getTime());
     }
 
     private void setupRecycler() {
@@ -169,7 +161,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
 
     private void setExpandFilterClickListener() {
         expandFilter.setOnClickListener(v -> {
-            if(filterCard.getVisibility() == View.VISIBLE && flightAdapter.getItemCount() >= 1) {
+            if (filterCard.getVisibility() == View.VISIBLE && flightAdapter.getItemCount() >= 1) {
                 filterCard.setVisibility(View.GONE);
                 expandFilter.setImageResource(R.drawable.ic_expand_more);
             } else {
@@ -189,13 +181,13 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
         } else if (parent.getId() == R.id.from_spinner && position != parent.getCount() - 1) {
             oldAirport = trip.getOriginAirport();
             trip.setOriginAirport(originList.get(position).split(" - ")[0]);
-            if(!trip.getOriginAirport().equals(oldAirport)) {
+            if (!trip.getOriginAirport().equals(oldAirport)) {
                 checkFlightData();
             }
         } else if (parent.getId() == R.id.to_spinner && position != parent.getCount() - 1) {
             oldAirport = trip.getDestinationAirport();
             trip.setDestinationAirport(destinationList.get(position).split(" - ")[0]);
-            if(!trip.getOriginAirport().equals(oldAirport)) {
+            if (!trip.getOriginAirport().equals(oldAirport)) {
                 checkFlightData();
             }
         }
@@ -278,7 +270,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
                 oldAirport = trip.getOriginAirport();
                 addAirports(airportArray, originList, originAdapter, fromSpinner);
                 trip.setOriginAirport(airportArray[0].getIataCode());
-                if(!trip.getOriginAirport().equals(oldAirport)) {
+                if (!trip.getOriginAirport().equals(oldAirport)) {
                     checkFlightData();
                 }
                 break;
@@ -286,7 +278,7 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
                 oldAirport = trip.getDestinationAirport();
                 addAirports(airportArray, destinationList, destinationAdapter, toSpinner);
                 trip.setDestinationAirport(airportArray[0].getIataCode());
-                if(!trip.getDestinationAirport().equals(oldAirport)) {
+                if (!trip.getDestinationAirport().equals(oldAirport)) {
                     checkFlightData();
                 }
                 break;
@@ -340,8 +332,18 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     @Override
     public void onResponseReceive(FlightOffer flightOffer) {
         trip.setFlight(flightOffer);
-        nextBtn.setVisibility(flightOffer == null ? View.GONE : View.VISIBLE);
+        nextBtn.setVisibility(View.VISIBLE);
         Toast.makeText(context, "Flight Selected", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setNextBtnOnClickListener() {
+        nextBtn.setOnClickListener(v -> {
+            if(trip.isHotelNeeded()) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.frag_container, HotelsFragment.newInstance(trip))
+                    .addToBackStack(null).commit();
+            }
+        });
     }
 
     @Override

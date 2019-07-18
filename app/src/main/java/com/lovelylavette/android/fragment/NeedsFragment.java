@@ -92,8 +92,16 @@ public class NeedsFragment extends Fragment {
     }
 
     private void addNextOnClickListener() {
-        nextLink.setOnClickListener(v -> getFragmentManager().beginTransaction()
-                .replace(R.id.frag_container, FlightsFragment.newInstance(trip))
-                .addToBackStack(null).commit());
+        nextLink.setOnClickListener(v ->  {
+                if(trip.isFlightNeeded()) {
+                    getFragmentManager().beginTransaction()
+                        .replace(R.id.frag_container, FlightsFragment.newInstance(trip))
+                        .addToBackStack(null).commit();
+                } else if(trip.isHotelNeeded()) {
+                    getFragmentManager().beginTransaction()
+                        .replace(R.id.frag_container, HotelsFragment.newInstance(trip))
+                        .addToBackStack(null).commit();
+                }
+        });
     }
 }

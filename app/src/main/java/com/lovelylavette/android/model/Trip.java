@@ -24,7 +24,7 @@ public class Trip implements Serializable {
     private String originAirport;
     private String destinationAirport;
     private int numPlaneSeats;
-    private boolean roundTrip;
+    private boolean roundTrip = true;
     private Calendar departureDate;
     private Calendar returnDate;
     private int numHotelGuests;

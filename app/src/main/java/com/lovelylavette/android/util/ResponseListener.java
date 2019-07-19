@@ -1,6 +1,10 @@
 package com.lovelylavette.android.util;
 
+import com.amadeus.resources.Airline;
 import com.amadeus.resources.Location;
+import com.amadeus.resources.PointOfInterest;
+
+import java.util.List;
 
 public class ResponseListener {
 
@@ -13,7 +17,7 @@ public class ResponseListener {
     }
 
     public interface Airlines {
-        void onResponseReceive(com.amadeus.resources.Airline[] airlines);
+        void onResponseReceive(Airline[] airlines);
     }
 
     public interface HotelOffers {
@@ -26,5 +30,13 @@ public class ResponseListener {
 
     public interface HotelOffer {
         void onResponseReceive(com.amadeus.resources.HotelOffer hotelOffer);
+    }
+
+    public interface PointsOfInterest {
+        void onResponseReceive(PointOfInterest[] pointsOfInterest);
+    }
+
+    public interface Sights {
+        void onResponseReceive(List<PointOfInterest> pointsOfInterest);
     }
 }

@@ -338,10 +338,14 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
 
     private void setNextBtnOnClickListener() {
         nextBtn.setOnClickListener(v -> {
-            if(trip.isHotelNeeded()) {
+            if (trip.isHotelNeeded()) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.frag_container, HotelsFragment.newInstance(trip))
                     .addToBackStack(null).commit();
+            } else if (trip.isSightsNeeded()) {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.frag_container, SightsFragment.newInstance(trip))
+                        .addToBackStack(null).commit();
             }
         });
     }

@@ -17,25 +17,24 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amadeus.resources.HotelOffer;
+import com.amadeus.resources.PointOfInterest;
 import com.lovelylavette.android.R;
-import com.lovelylavette.android.adapter.HotelAdapter;
+import com.lovelylavette.android.adapter.SightAdapter;
 import com.lovelylavette.android.api.AmadeusApi;
 import com.lovelylavette.android.model.Trip;
-import com.lovelylavette.android.util.DateUtils;
 import com.lovelylavette.android.util.ResponseListener;
 
-import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HotelsFragment extends Fragment implements ResponseListener.HotelOffer {
-    private static final String TAG = "HotelsFragment";
+public class SightsFragment extends Fragment implements ResponseListener.Sights {
+    private static final String TAG = "SightsFragment";
     private static final String ARG_TRIP = "trip";
     private Context context;
     private Trip trip;
-    private HotelAdapter hotelAdapter;
+    private SightAdapter sightAdapter;
 
     @BindView(R.id.expand)
     ImageView expandFilter;
@@ -43,23 +42,21 @@ public class HotelsFragment extends Fragment implements ResponseListener.HotelOf
     CardView filterCard;
     @BindView(R.id.location)
     TextView locationText;
-    @BindView(R.id.date)
-    TextView dateText;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
-    @BindView(R.id.hotel_recycler)
-    RecyclerView hotelRecycler;
+    @BindView(R.id.sight_recycler)
+    RecyclerView sightRecycler;
     @BindView(R.id.search)
     Button searchBtn;
     @BindView(R.id.next_btn)
     Button nextBtn;
 
 
-    public HotelsFragment() {
+    public SightsFragment() {
     }
 
-    public static HotelsFragment newInstance(Trip trip) {
-        HotelsFragment fragment = new HotelsFragment();
+    public static SightsFragment newInstance(Trip trip) {
+        SightsFragment fragment = new SightsFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_TRIP, trip);
         fragment.setArguments(args);
@@ -80,14 +77,14 @@ public class HotelsFragment extends Fragment implements ResponseListener.HotelOf
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_hotels, container, false);
+        View view = inflater.inflate(R.layout.fragment_sights, container, false);
         ButterKnife.bind(this, view);
 
         setInitialValues();
-        searchBtn.setOnClickListener(v -> getHotels());
+        searchBtn.setOnClickListener(v -> getSights());
         setExpandFilterClickListener();
         setupRecycler();
-        checkHotelData();
+        checkSightData();
         setNextBtnOnClickListener();
         return view;
     }
@@ -96,30 +93,18 @@ public class HotelsFragment extends Fragment implements ResponseListener.HotelOf
         if (trip.getDestination() != null) {
             locationText.setText(trip.getDestination().getAddress());
         }
-
-        if (trip.getDepartureDate() != null && trip.getReturnDate() != null) {
-            trip.setCheckInDate(trip.getDepartureDate());
-            if (trip.isRoundTrip()) {
-                trip.setCheckOutDate(trip.getReturnDate());
-            } else {
-                Calendar nextDay = trip.getDepartureDate();
-                nextDay.add(Calendar.DAY_OF_MONTH, 1);
-                trip.setCheckOutDate(nextDay);
-            }
-            dateText.setText(DateUtils.getFormattedRange(trip.getDepartureDate(), trip.getReturnDate()));
-        }
     }
 
     private void setupRecycler() {
-        hotelRecycler.setHasFixedSize(true);
-        hotelRecycler.setLayoutManager(new LinearLayoutManager(context));
-        hotelAdapter = new HotelAdapter(new HotelOffer[]{}, this, getResources());
-        hotelRecycler.setAdapter(hotelAdapter);
+        sightRecycler.setHasFixedSize(true);
+        sightRecycler.setLayoutManager(new LinearLayoutManager(context));
+        sightAdapter = new SightAdapter(new PointOfInterest[]{}, this, getResources());
+        sightRecycler.setAdapter(sightAdapter);
     }
 
     private void setExpandFilterClickListener() {
         expandFilter.setOnClickListener(v -> {
-            if (filterCard.getVisibility() == View.VISIBLE && hotelAdapter.getItemCount() >= 1) {
+            if (filterCard.getVisibility() == View.VISIBLE && sightAdapter.getItemCount() >= 1) {
                 filterCard.setVisibility(View.GONE);
                 expandFilter.setImageResource(R.drawable.ic_expand_more);
             } else {
@@ -129,52 +114,48 @@ public class HotelsFragment extends Fragment implements ResponseListener.HotelOf
         });
     }
 
-    private void checkHotelData() {
-        if (trip.getDestination() != null && trip.getCheckInDate() != null && trip.getCheckOutDate() != null) {
-            searchBtn.setVisibility(View.VISIBLE);
+    private void checkSightData() {
+        if (trip.getDestination() != null) {
+            getSights();
         } else {
             searchBtn.setVisibility(View.GONE);
         }
     }
 
-    private void getHotels() {
+    private void getSights() {
         searchBtn.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        AmadeusApi.findHotels hotelsCall =
-                new AmadeusApi.findHotels();
+        AmadeusApi.findPointsOfInterest sightsCall =
+                new AmadeusApi.findPointsOfInterest();
 
-        hotelsCall.setOnResponseListener(hotelOffers -> {
+        sightsCall.setOnResponseListener(pointsOfInterest -> {
             progressBar.setVisibility(View.GONE);
+            searchBtn.setVisibility(View.VISIBLE);
 
-            if (hotelOffers == null || hotelOffers.length == 0) {
-                hotelAdapter.updateData(new HotelOffer[]{});
+            if (pointsOfInterest == null || pointsOfInterest.length == 0) {
+                sightAdapter.updateData(new PointOfInterest[]{});
                 expandFilter.setVisibility(View.GONE);
-                Toast.makeText(context, R.string.no_hotels, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.no_sights, Toast.LENGTH_SHORT).show();
             } else {
-                Log.i(TAG, hotelOffers.length + " Hotel Offers Found");
+                Log.i(TAG, pointsOfInterest.length + " Points of Interest Found");
                 filterCard.setVisibility(View.GONE);
-                hotelAdapter.updateData(hotelOffers);
+                sightAdapter.updateData(pointsOfInterest);
                 expandFilter.setVisibility(View.VISIBLE);
             }
         });
 
-        hotelsCall.execute(trip);
+        sightsCall.execute(trip.getDestination().getLatLng());
     }
 
     @Override
-    public void onResponseReceive(HotelOffer hotelOffer) {
-        trip.setHotel(hotelOffer);
+    public void onResponseReceive(List<PointOfInterest> pointsOfInterest) {
+        trip.setSights(pointsOfInterest);
         nextBtn.setVisibility(View.VISIBLE);
-        Toast.makeText(context, "Hotel Selected", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Sight Selected", Toast.LENGTH_SHORT).show();
     }
 
     private void setNextBtnOnClickListener() {
         nextBtn.setOnClickListener(v -> {
-            if (trip.isSightsNeeded()) {
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.frag_container, SightsFragment.newInstance(trip))
-                        .addToBackStack(null).commit();
-            }
         });
     }
 

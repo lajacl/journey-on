@@ -168,6 +168,11 @@ public final class AmadeusApi {
     }
 
     public static final class findPointsOfInterest extends AsyncTask<LatLng, Void, PointOfInterest[]> {
+        ResponseListener.PointsOfInterest listener;
+
+        public void setOnResponseListener(ResponseListener.PointsOfInterest listener) {
+            this.listener = listener;
+        }
 
         @Override
         protected PointOfInterest[] doInBackground(LatLng... latLngs) {
@@ -176,7 +181,8 @@ public final class AmadeusApi {
             try {
                 pointsOfInterest = amadeus.referenceData.locations.pointsOfInterest.get(Params
                         .with("latitude", latLngs[0].latitude)
-                        .and("longitude", latLngs[0].longitude));
+                        .and("longitude", latLngs[0].longitude)
+                        .and("radius", 20));
 
             } catch (ResponseException e) {
                 e.printStackTrace();
@@ -187,9 +193,7 @@ public final class AmadeusApi {
         @Override
         protected void onPostExecute(PointOfInterest[] pointsOfInterest) {
             super.onPostExecute(pointsOfInterest);
-            if(pointsOfInterest != null && pointsOfInterest.length > 0) {
-                Log.i(TAG, pointsOfInterest[0].toString());
-            }
+            listener.onResponseReceive(pointsOfInterest);
         }
     }
 }

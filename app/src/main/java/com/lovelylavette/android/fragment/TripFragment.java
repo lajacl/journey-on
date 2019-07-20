@@ -1,6 +1,7 @@
 package com.lovelylavette.android.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,13 +22,16 @@ import com.lovelylavette.android.R;
 import com.lovelylavette.android.api.AmadeusApi;
 import com.lovelylavette.android.model.Trip;
 import com.lovelylavette.android.util.DateUtils;
+import com.lovelylavette.android.util.TripPrefs;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -36,6 +41,8 @@ public class TripFragment extends Fragment {
     private static final String TAG = "TripFragment";
     private static final String ARG_TRIP = "trip";
     private static final String DELIMITER = ", ";
+    private static TripPrefs tripPrefs;
+    private Context context;
     private Trip trip;
     private HashMap<String, Airline> airlineMap = new HashMap<>();
 
@@ -67,6 +74,8 @@ public class TripFragment extends Fragment {
     TextView sightsLabel;
     @BindView(R.id.sights_ll)
     LinearLayout sightsLayout;
+    @BindView(R.id.save_btn)
+    Button saveBtn;
 
 
     public TripFragment() {
@@ -97,8 +106,20 @@ public class TripFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trip, container, false);
         ButterKnife.bind(this, view);
+        tripPrefs = new TripPrefs(context);
+        setSaveBtnOnClickListener();
         showTripData();
         return view;
+    }
+
+    private void setSaveBtnOnClickListener() {
+        saveBtn.setOnClickListener(v -> {
+            trip.setSaveDate(Calendar.getInstance());
+            tripPrefs.saveTrip(trip);
+            Log.i(TAG, "Trip Saved!");
+            List tripList = tripPrefs.getTrips();
+            Log.i(TAG, tripList.size() + " Trips Saved:\n" + tripList.toString());
+        });
     }
 
     private void showTripData() {
@@ -291,4 +312,9 @@ public class TripFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 }

@@ -33,4 +33,9 @@ public class Trip implements Serializable {
     private FlightOffer flight;
     private HotelOffer hotel;
     private List<PointOfInterest> sights;
+    private Calendar saveDate;
+
+    public Trip () {
+        id = UUID.randomUUID();
+    }
 }

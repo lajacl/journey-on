@@ -107,9 +107,11 @@ public class SightsFragment extends Fragment implements ResponseListener.Sights 
             if (filterCard.getVisibility() == View.VISIBLE && sightAdapter.getItemCount() >= 1) {
                 filterCard.setVisibility(View.GONE);
                 expandFilter.setImageResource(R.drawable.ic_expand_more);
+                searchBtn.setVisibility(View.GONE);
             } else {
                 filterCard.setVisibility(View.VISIBLE);
                 expandFilter.setImageResource(R.drawable.ic_expand_less);
+                searchBtn.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -130,11 +132,11 @@ public class SightsFragment extends Fragment implements ResponseListener.Sights 
 
         sightsCall.setOnResponseListener(pointsOfInterest -> {
             progressBar.setVisibility(View.GONE);
-            searchBtn.setVisibility(View.VISIBLE);
 
             if (pointsOfInterest == null || pointsOfInterest.length == 0) {
                 sightAdapter.updateData(new PointOfInterest[]{});
                 expandFilter.setVisibility(View.GONE);
+                searchBtn.setVisibility(View.VISIBLE);
                 Toast.makeText(context, R.string.no_sights, Toast.LENGTH_SHORT).show();
             } else {
                 Log.i(TAG, pointsOfInterest.length + " Points of Interest Found");
@@ -149,13 +151,18 @@ public class SightsFragment extends Fragment implements ResponseListener.Sights 
 
     @Override
     public void onResponseReceive(List<PointOfInterest> pointsOfInterest) {
+        if(trip.getSights() == null || pointsOfInterest.size() > trip.getSights().size()) {
+            Toast.makeText(context, "Sight Selected", Toast.LENGTH_SHORT).show();
+        }
         trip.setSights(pointsOfInterest);
         nextBtn.setVisibility(View.VISIBLE);
-        Toast.makeText(context, "Sight Selected", Toast.LENGTH_SHORT).show();
     }
 
     private void setNextBtnOnClickListener() {
         nextBtn.setOnClickListener(v -> {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.frag_container, TripFragment.newInstance(trip))
+                    .addToBackStack(null).commit();
         });
     }
 

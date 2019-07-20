@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/FragmentRoot"
+    android:orientation="vertical"
+    tools:context=".fragment.TripFragment">
+
+    <TextView
+        style="@style/Header"
+        android:text="@string/header_trip" />
+
+    <TextView
+        android:id="@+id/flight_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/flight"
+        android:textAllCaps="true"
+        android:textStyle="bold" />
+
+    <include layout="@layout/item_flight_offer" />
+
+    <TextView
+        android:id="@+id/hotel_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/hotel"
+        android:textAllCaps="true"
+        android:textStyle="bold" />
+
+    <include layout="@layout/item_hotel_offer" />
+
+    <TextView
+        android:id="@+id/sights_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/sights"
+        android:textAllCaps="true"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/sights_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <Button
+        android:id="@+id/save_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorAccent"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:text="@string/save_trip"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

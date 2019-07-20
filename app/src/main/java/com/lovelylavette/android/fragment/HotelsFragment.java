@@ -4,6 +4,7 @@ package com.lovelylavette.android.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -97,9 +98,9 @@ public class HotelsFragment extends Fragment implements ResponseListener.HotelOf
             locationText.setText(trip.getDestination().getAddress());
         }
 
-        if (trip.getDepartureDate() != null && trip.getReturnDate() != null) {
+        if (trip.getDepartureDate() != null) {
             trip.setCheckInDate(trip.getDepartureDate());
-            if (trip.isRoundTrip()) {
+            if (trip.isRoundTrip() && trip.getReturnDate() != null) {
                 trip.setCheckOutDate(trip.getReturnDate());
             } else {
                 Calendar nextDay = trip.getDepartureDate();
@@ -131,7 +132,7 @@ public class HotelsFragment extends Fragment implements ResponseListener.HotelOf
 
     private void checkHotelData() {
         if (trip.getDestination() != null && trip.getCheckInDate() != null && trip.getCheckOutDate() != null) {
-            searchBtn.setVisibility(View.VISIBLE);
+            getHotels();
         } else {
             searchBtn.setVisibility(View.GONE);
         }
@@ -149,6 +150,7 @@ public class HotelsFragment extends Fragment implements ResponseListener.HotelOf
             if (hotelOffers == null || hotelOffers.length == 0) {
                 hotelAdapter.updateData(new HotelOffer[]{});
                 expandFilter.setVisibility(View.GONE);
+                searchBtn.setVisibility(View.VISIBLE);
                 Toast.makeText(context, R.string.no_hotels, Toast.LENGTH_SHORT).show();
             } else {
                 Log.i(TAG, hotelOffers.length + " Hotel Offers Found");
@@ -170,9 +172,13 @@ public class HotelsFragment extends Fragment implements ResponseListener.HotelOf
 
     private void setNextBtnOnClickListener() {
         nextBtn.setOnClickListener(v -> {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+
             if (trip.isSightsNeeded()) {
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.frag_container, SightsFragment.newInstance(trip))
+                ft.replace(R.id.frag_container, SightsFragment.newInstance(trip))
+                        .addToBackStack(null).commit();
+            } else {
+                ft.replace(R.id.frag_container, TripFragment.newInstance(trip))
                         .addToBackStack(null).commit();
             }
         });

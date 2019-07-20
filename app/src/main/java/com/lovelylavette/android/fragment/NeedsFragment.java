@@ -3,6 +3,7 @@ package com.lovelylavette.android.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,10 +77,10 @@ public class NeedsFragment extends Fragment {
                     break;
             }
 
-            if(flightCheckBox.isChecked() || hotelCheckBox.isChecked() || sightsCheckBox.isChecked()
-                && cardNav.getVisibility() == View.GONE) {
+            if (flightCheckBox.isChecked() || hotelCheckBox.isChecked() || sightsCheckBox.isChecked()
+                    && cardNav.getVisibility() == View.GONE) {
                 cardNav.setVisibility(View.VISIBLE);
-            } else if(cardNav.getVisibility() == View.VISIBLE) {
+            } else if (cardNav.getVisibility() == View.VISIBLE) {
                 cardNav.setVisibility(View.GONE);
             }
 
@@ -92,16 +93,22 @@ public class NeedsFragment extends Fragment {
     }
 
     private void addNextOnClickListener() {
-        nextLink.setOnClickListener(v ->  {
-                if(trip.isFlightNeeded()) {
-                    getFragmentManager().beginTransaction()
-                        .replace(R.id.frag_container, FlightsFragment.newInstance(trip))
+        nextLink.setOnClickListener(v -> {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+            if (trip.isFlightNeeded()) {
+                ft.replace(R.id.frag_container, FlightsFragment.newInstance(trip))
                         .addToBackStack(null).commit();
-                } else if(trip.isHotelNeeded()) {
-                    getFragmentManager().beginTransaction()
-                        .replace(R.id.frag_container, HotelsFragment.newInstance(trip))
+            } else if (trip.isHotelNeeded()) {
+                ft.replace(R.id.frag_container, HotelsFragment.newInstance(trip))
                         .addToBackStack(null).commit();
-                }
+            } else if (trip.isSightsNeeded()) {
+                ft.replace(R.id.frag_container, SightsFragment.newInstance(trip))
+                        .addToBackStack(null).commit();
+            } else {
+                ft.replace(R.id.frag_container, TripFragment.newInstance(trip))
+                        .addToBackStack(null).commit();
+            }
         });
     }
 }

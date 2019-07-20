@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -338,13 +339,16 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
 
     private void setNextBtnOnClickListener() {
         nextBtn.setOnClickListener(v -> {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            
             if (trip.isHotelNeeded()) {
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.frag_container, HotelsFragment.newInstance(trip))
-                    .addToBackStack(null).commit();
+                ft.replace(R.id.frag_container, HotelsFragment.newInstance(trip))
+                        .addToBackStack(null).commit();
             } else if (trip.isSightsNeeded()) {
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.frag_container, SightsFragment.newInstance(trip))
+                ft.replace(R.id.frag_container, SightsFragment.newInstance(trip))
+                        .addToBackStack(null).commit();
+            } else {
+                ft.replace(R.id.frag_container, TripFragment.newInstance(trip))
                         .addToBackStack(null).commit();
             }
         });

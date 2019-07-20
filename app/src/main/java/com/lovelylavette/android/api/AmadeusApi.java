@@ -1,7 +1,6 @@
 package com.lovelylavette.android.api;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.amadeus.Amadeus;
 import com.amadeus.Params;
@@ -76,7 +75,7 @@ public final class AmadeusApi {
                         .and("departureDate", sdf.format(trip.getDepartureDate().getTime()))
                         .and("currency", "USD");
 
-                if(trip.isRoundTrip()) {
+                if (trip.isRoundTrip()) {
                     params.and("returnDate", sdf.format(trip.getReturnDate().getTime()));
                 }
 
@@ -88,7 +87,7 @@ public final class AmadeusApi {
                 flightOffers = amadeus.shopping.flightOffers.get(params);
 
                 //TODO Add pagination
-                 /*FlightOffer[] flightOffersNext = (FlightOffer[])amadeus.next(flightOffers[0]);*/
+                /*FlightOffer[] flightOffersNext = (FlightOffer[])amadeus.next(flightOffers[0]);*/
 
             } catch (ResponseException e) {
                 e.printStackTrace();
@@ -150,8 +149,8 @@ public final class AmadeusApi {
                 hotelOffers = amadeus.shopping.hotelOffers.get(Params
                         .with("latitude", latlng.latitude)
                         .and("longitude", latlng.longitude)
-                        .and("checkInDate", sdf.format(trip.getDepartureDate().getTime()))
-                        .and("checkOutDate", sdf.format(trip.getReturnDate().getTime()))
+                        .and("checkInDate", sdf.format(trip.getCheckInDate().getTime()))
+                        .and("checkOutDate", sdf.format(trip.getCheckOutDate().getTime()))
                         .and("currency", "USD"));
 
             } catch (ResponseException e) {

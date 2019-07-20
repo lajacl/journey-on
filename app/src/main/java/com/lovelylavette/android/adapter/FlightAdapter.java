@@ -39,8 +39,8 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
 
     public class FlightHolder extends RecyclerView.ViewHolder {
         FlightOffer flightOffer;
-        LinearLayout offerLayout = itemView.findViewById(R.id.offer_container);
-        CardView offerCard = itemView.findViewById(R.id.offer_card);
+        LinearLayout offerLayout = itemView.findViewById(R.id.flight_container);
+        CardView offerCard = itemView.findViewById(R.id.flight_offer_card);
 
         FlightHolder(@NonNull View itemView) {
             super(itemView);

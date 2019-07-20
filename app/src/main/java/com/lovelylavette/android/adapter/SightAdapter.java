@@ -27,7 +27,7 @@ public class SightAdapter extends RecyclerView.Adapter<SightAdapter.SightHolder>
     private List<Integer> last_indices = new ArrayList();
 
     public class SightHolder extends RecyclerView.ViewHolder {
-        CardView offerCard = itemView.findViewById(R.id.offer_card);
+        CardView offerCard = itemView.findViewById(R.id.sights_offer_card);
         TextView name = itemView.findViewById(R.id.name);
         TextView type = itemView.findViewById(R.id.type);
         TextView tags = itemView.findViewById(R.id.tags);
@@ -78,7 +78,7 @@ public class SightAdapter extends RecyclerView.Adapter<SightAdapter.SightHolder>
                 sightsList.add(pointOfInterest);
                 listener.onResponseReceive(sightsList);
             } else {
-                last_indices.remove(position);
+                last_indices.remove(last_indices.indexOf(position));
                 sightsList.remove(pointOfInterest);
                 listener.onResponseReceive(sightsList);
             }

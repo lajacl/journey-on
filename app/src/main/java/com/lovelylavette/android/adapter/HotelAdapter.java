@@ -25,7 +25,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelHolder>
 
     public class HotelHolder extends RecyclerView.ViewHolder {
         HotelOffer hotelOffer;
-        CardView offerCard = itemView.findViewById(R.id.offer_card);
+        CardView offerCard = itemView.findViewById(R.id.hotel_offer_card);
         TextView name = itemView.findViewById(R.id.name);
         TextView address = itemView.findViewById(R.id.address);
         TextView price = itemView.findViewById(R.id.price);

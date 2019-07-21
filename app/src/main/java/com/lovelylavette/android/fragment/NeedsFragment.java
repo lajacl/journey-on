@@ -11,9 +11,14 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 
 import com.lovelylavette.android.R;
+import com.lovelylavette.android.model.CoSpace;
 import com.lovelylavette.android.model.Trip;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,6 +27,7 @@ public class NeedsFragment extends Fragment {
     private static final String TAG = "NeedsFragment";
     private static final String ARG_TRIP = "trip";
     private Trip trip;
+    private List<CoSpace> coSpaceList = new ArrayList<>();
 
     @BindView(R.id.flight_cb)
     CheckBox flightCheckBox;
@@ -33,6 +39,8 @@ public class NeedsFragment extends Fragment {
     LinearLayout cardNav;
     @BindView(R.id.next_link)
     LinearLayout nextLink;
+    @BindView(R.id.travel_reason_rg)
+    RadioGroup reasonsRadio;
 
 
     public NeedsFragment() {
@@ -51,6 +59,8 @@ public class NeedsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             trip = (Trip) getArguments().getSerializable(ARG_TRIP);
+        } else {
+            trip = new Trip();
         }
     }
 
@@ -59,8 +69,18 @@ public class NeedsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_needs, container, false);
         ButterKnife.bind(this, view);
         addCheckedChangeListeners();
+        addReasonsCheckedListener();
         addNextOnClickListener();
         return view;
+    }
+
+    private void addReasonsCheckedListener() {
+        reasonsRadio.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
+                case R.id.work_radio:
+                    trip.setTravelReason("work");
+            }
+        });
     }
 
     private void addCheckedChangeListeners() {
@@ -77,11 +97,12 @@ public class NeedsFragment extends Fragment {
                     break;
             }
 
-            if (flightCheckBox.isChecked() || hotelCheckBox.isChecked() || sightsCheckBox.isChecked()
-                    && cardNav.getVisibility() == View.GONE) {
+            if (flightCheckBox.isChecked() || hotelCheckBox.isChecked()) {
                 cardNav.setVisibility(View.VISIBLE);
-            } else if (cardNav.getVisibility() == View.VISIBLE) {
+                sightsCheckBox.setEnabled(true);
+            } else {
                 cardNav.setVisibility(View.GONE);
+                sightsCheckBox.setEnabled(false);
             }
 
             Log.i(TAG, trip.toString());

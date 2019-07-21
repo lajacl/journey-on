@@ -18,6 +18,7 @@ public class Trip implements Serializable {
     private boolean flightNeeded;
     private boolean hotelNeeded;
     private boolean sightsNeeded;
+    private String travelReason;
     private int budget;
     private Place origin;
     private Place destination;

@@ -18,6 +18,13 @@
     <string name="flight">Flight</string>
     <string name="hotel">Hotel</string>
     <string name="sights">Points of Interest</string>
+    <string name="travel_reason">Is there a main reason for this trip? (optional)</string>
+    <string name="work">Work</string>
+    <string name="family">Family Vacation</string>
+    <string name="adventure">Adventure</string>
+    <string name="romance">Romantic Getaway</string>
+    <string name="historic">Historical Interest</string>
+    <string name="food">Food Interest</string>
 
     <string name="header_flights">Fancy a flight?</string>
     <string name="label_origin">From</string>

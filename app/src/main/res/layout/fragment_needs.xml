@@ -70,9 +70,62 @@
 
                 <CheckBox
                     android:id="@+id/sights_cb"
-                    style="@style/OptionCheckbox" />
+                    style="@style/OptionCheckbox"
+                    android:enabled="false" />
 
             </LinearLayout>
+
+            <View style="@style/HorizontalLine" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/travel_reason"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/travel_reason_rg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/work_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/work" />
+
+                <RadioButton
+                    android:id="@+id/family_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/family" />
+
+                <RadioButton
+                    android:id="@+id/adventure_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/adventure" />
+
+                <RadioButton
+                    android:id="@+id/romance_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/romance" />
+
+                <RadioButton
+                    android:id="@+id/historic_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/historic" />
+
+                <RadioButton
+                    android:id="@+id/food_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/food" />
+
+            </RadioGroup>
 
             <LinearLayout
                 android:id="@+id/card_nav"
@@ -89,8 +142,8 @@
                     android:id="@+id/next_link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="end">
+                    android:layout_gravity="end"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"

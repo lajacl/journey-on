@@ -54,4 +54,7 @@
     <string name="header_trip">How\'s the trip looking?</string>
     <string name="save_trip">Awesome, Save It!</string>
 
+    <string name="header_inspiration">Care for some trip inspiration?</string>
+    <string name="no_destinations">No Destinations Found\nTry again later</string>
+
 </resources>

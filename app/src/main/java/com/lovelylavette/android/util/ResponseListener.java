@@ -1,6 +1,7 @@
 package com.lovelylavette.android.util;
 
 import com.amadeus.resources.Airline;
+import com.amadeus.resources.FlightDestination;
 import com.amadeus.resources.Location;
 import com.amadeus.resources.PointOfInterest;
 
@@ -38,5 +39,9 @@ public class ResponseListener {
 
     public interface Sights {
         void onResponseReceive(List<PointOfInterest> pointsOfInterest);
+    }
+
+    public interface FlightDestinations {
+        void onResponseReceive(FlightDestination[] flightDestinations);
     }
 }

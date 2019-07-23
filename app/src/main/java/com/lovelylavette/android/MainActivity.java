@@ -12,18 +12,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.google.android.libraries.places.api.Places;
+import com.lovelylavette.android.fragment.DestinationFragment;
 import com.lovelylavette.android.fragment.SearchFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+    FragmentManager fragmentManager;
+
     @BindView(R.id.nav_view)
     BottomNavigationView navView;
 
-    FragmentManager fragmentManager;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
@@ -32,10 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.menu_dashboard:
+                    ft.replace(R.id.frag_container, new DestinationFragment())
+                            .commit();
                     return true;
                 case R.id.menu_search:
-                    ft.replace(R.id.frag_container, new SearchFragment());
-                    ft.commit();
+                    ft.replace(R.id.frag_container, new SearchFragment())
+                            .commit();
                     return true;
                 case R.id.menu_trips:
                     return true;
@@ -52,14 +55,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         fragmentManager = getSupportFragmentManager();
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
         resetNav();
         Places.initialize(getApplicationContext(), BuildConfig.GoogleApiKey);
     }
 
     private void resetNav() {
         Fragment fragment = fragmentManager.findFragmentById(R.id.frag_container);
-        if(fragment == null) {
+        if (fragment == null) {
             navView.setSelectedItemId(R.id.menu_dashboard);
         }
     }

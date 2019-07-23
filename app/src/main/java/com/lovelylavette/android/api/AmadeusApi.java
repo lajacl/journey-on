@@ -6,6 +6,7 @@ import com.amadeus.Amadeus;
 import com.amadeus.Params;
 import com.amadeus.exceptions.ResponseException;
 import com.amadeus.resources.Airline;
+import com.amadeus.resources.FlightDestination;
 import com.amadeus.resources.FlightOffer;
 import com.amadeus.resources.HotelOffer;
 import com.amadeus.resources.Location;
@@ -193,6 +194,37 @@ public final class AmadeusApi {
         protected void onPostExecute(PointOfInterest[] pointsOfInterest) {
             super.onPostExecute(pointsOfInterest);
             listener.onResponseReceive(pointsOfInterest);
+        }
+    }
+
+    public static final class findDestinationFlights extends AsyncTask<String, Void, FlightDestination[]> {
+        ResponseListener.FlightDestinations listener;
+
+        public void setOnResponseListener(ResponseListener.FlightDestinations listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        protected FlightDestination[] doInBackground(String... strings) {
+            FlightDestination[] flightDestinations = null;
+
+            try {
+                String airportCode = strings[0];
+
+                flightDestinations = amadeus.shopping.flightDestinations.get(Params
+                        .with("origin", airportCode)
+                        .and("currency", "USD"));
+
+            } catch (ResponseException e) {
+                e.printStackTrace();
+            }
+            return flightDestinations;
+        }
+
+        @Override
+        protected void onPostExecute(FlightDestination[] flightDestinations) {
+            super.onPostExecute(flightDestinations);
+            listener.onResponseReceive(flightDestinations);
         }
     }
 }

@@ -99,7 +99,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             setTravelClass(travelClass, service.getSegments()[0]);
             setAirports(airports, service);
             setFlightTimes(time, segment);
-            duration.setText(TextUtils.split(segment.getDuration(), "T")[1].replace("H", "H "));
+            setFlightDuration(segment, duration);
             setNumStops(stops, service.getSegments().length);
         }
 
@@ -119,6 +119,17 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             last_index = position;
             notifyDataSetChanged();
         });
+    }
+
+    private void setFlightDuration(FlightOffer.FlightSegment segment, TextView tv) {
+        int hours = Integer.parseInt(segment.getDuration().substring(0, 1));
+        Log.i(TAG, "Hours: " + hours + " Duration: " + segment.getDuration());
+
+        if (hours > 0) {
+            tv.setText(segment.getDuration().replace("DT", "D ").replace("H", "H "));
+        } else {
+            tv.setText(TextUtils.split(segment.getDuration(), "T")[1].replace("H", "H "));
+        }
     }
 
     private void setPrice(TextView tv, FlightOffer.OfferItem offer, boolean isFirst) {

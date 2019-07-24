@@ -57,4 +57,15 @@
     <string name="header_inspiration">Care for some trip inspiration?</string>
     <string name="no_destinations">No Destinations Found\nTry again later</string>
 
+    <string name="header_profile">Want to customize your experience?</string>
+    <string name="profile_name">Name/Nickname</string>
+    <string name="profile_origin">Favorite Origin Airport</string>
+    <string name="profile_currency">Preferred Currency</string>
+    <string name="profile_wishlist">Places To Travel</string>
+    <string name="profile_save">Save Profile</string>
+    <string name="hint_airport_code">ATL</string>
+    <string name="hint_currency_usd">USD</string>
+    <string name="hint_wishlist_locations">London, England\nParis, France\nMadrid, Spain\nBerlin, Germany </string>
+    <string name="profile_saved">Profile Saved</string>
+
 </resources>

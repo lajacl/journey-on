@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.google.android.libraries.places.api.Places;
 import com.lovelylavette.android.fragment.DestinationFragment;
+import com.lovelylavette.android.fragment.ProfileFragment;
 import com.lovelylavette.android.fragment.SearchFragment;
 
 import butterknife.BindView;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.menu_trips:
                     return true;
                 case R.id.menu_profile:
+                    ft.replace(R.id.frag_container, new ProfileFragment())
+                            .commit();
                     return true;
             }
             return false;
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private void resetNav() {
         Fragment fragment = fragmentManager.findFragmentById(R.id.frag_container);
         if (fragment == null) {
-            navView.setSelectedItemId(R.id.menu_dashboard);
+            navView.setSelectedItemId(R.id.menu_search);
         }
     }
 

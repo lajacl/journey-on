@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amadeus.resources.Airline;
 import com.amadeus.resources.FlightOffer;
@@ -116,7 +117,7 @@ public class TripFragment extends Fragment {
         saveBtn.setOnClickListener(v -> {
             trip.setSaveDate(Calendar.getInstance());
             tripPrefs.saveTrip(trip);
-            Log.i(TAG, "Trip Saved!");
+            Toast.makeText(context, R.string.trip_saved, Toast.LENGTH_SHORT).show();
             List tripList = tripPrefs.getTrips();
             Log.i(TAG, tripList.size() + " Trips Saved:\n" + tripList.toString());
         });

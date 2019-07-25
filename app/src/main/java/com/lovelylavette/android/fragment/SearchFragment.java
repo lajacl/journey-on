@@ -14,9 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.model.Place;
@@ -44,13 +44,13 @@ public class SearchFragment extends Fragment {
     @BindView(R.id.search_budget)
     EditText budgetEditText;
     @BindView(R.id.next_locale)
-    ImageView localeNext;
+    LinearLayout localeNext;
     @BindView(R.id.next_sight)
-    ImageView sightNext;
+    LinearLayout sightNext;
     @BindView(R.id.next_budget)
-    ImageView budgetNext;
+    LinearLayout budgetNext;
     @BindView(R.id.next_any)
-    ImageView anyNext;
+    LinearLayout anyNext;
 
 
     public SearchFragment() {
@@ -107,10 +107,14 @@ public class SearchFragment extends Fragment {
                 .replace(R.id.frag_container, NeedsFragment.newInstance(trip))
                 .addToBackStack(null).commit();
 
+//        TODO Implement other trip paths in full
+        View.OnClickListener nextFutureListener = v ->
+                Toast.makeText(context, R.string.future_feature, Toast.LENGTH_SHORT).show();
+
         localeNext.setOnClickListener(nextListener);
-        sightNext.setOnClickListener(nextListener);
-        budgetNext.setOnClickListener(nextListener);
-        anyNext.setOnClickListener(nextListener);
+        sightNext.setOnClickListener(nextFutureListener);
+        budgetNext.setOnClickListener(nextFutureListener);
+        anyNext.setOnClickListener(nextFutureListener);
     }
 
     @Override

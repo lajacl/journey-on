@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:text="@string/option_locale"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold|italic" />
 
             <TextView
@@ -55,11 +55,13 @@
                 android:layout_marginBottom="8dp" />
 
             <LinearLayout
+                android:id="@+id/next_locale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider_locale"
                 android:layout_alignParentEnd="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="invisible">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -71,12 +73,10 @@
                     android:textStyle="bold|italic" />
 
                 <ImageView
-                    android:id="@+id/next_locale"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_navigate_next"
-                    android:tint="@color/colorPrimary"
-                    android:visibility="invisible" />
+                    android:tint="@color/colorPrimary" />
 
             </LinearLayout>
 
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:text="@string/option_sight"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold|italic" />
 
             <TextView
@@ -126,11 +126,13 @@
                 android:layout_marginBottom="8dp" />
 
             <LinearLayout
+                android:id="@+id/next_sight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider_sight"
                 android:layout_alignParentEnd="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="invisible">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -142,12 +144,10 @@
                     android:textStyle="bold|italic" />
 
                 <ImageView
-                    android:id="@+id/next_sight"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_navigate_next"
-                    android:tint="@color/colorPrimary"
-                    android:visibility="invisible" />
+                    android:tint="@color/colorPrimary" />
 
             </LinearLayout>
 
@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:text="@string/option_budget"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold|italic" />
 
             <EditText
@@ -201,11 +201,13 @@
                 android:layout_marginBottom="8dp" />
 
             <LinearLayout
+                android:id="@+id/next_budget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider_budget"
                 android:layout_alignParentEnd="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="invisible">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -217,12 +219,10 @@
                     android:textStyle="bold|italic" />
 
                 <ImageView
-                    android:id="@+id/next_budget"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_navigate_next"
-                    android:tint="@color/colorPrimary"
-                    android:visibility="invisible" />
+                    android:tint="@color/colorPrimary" />
 
             </LinearLayout>
 
@@ -250,7 +250,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:text="@string/option_any"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold|italic" />
 
             <View
@@ -261,6 +261,7 @@
                 android:layout_marginBottom="8dp" />
 
             <LinearLayout
+                android:id="@+id/next_any"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider_any"
@@ -277,7 +278,6 @@
                     android:textStyle="bold|italic" />
 
                 <ImageView
-                    android:id="@+id/next_any"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_navigate_next"

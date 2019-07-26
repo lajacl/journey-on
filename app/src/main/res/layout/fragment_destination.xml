@@ -6,6 +6,7 @@
     tools:context=".fragment.DestinationFragment">
 
     <TextView
+        android:id="@+id/destination_header"
         style="@style/Header"
         android:text="@string/header_inspiration" />
 

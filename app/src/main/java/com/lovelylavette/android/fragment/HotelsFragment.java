@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,8 +46,8 @@ public class HotelsFragment extends Fragment implements ResponseListener.HotelOf
     TextView locationText;
     @BindView(R.id.date)
     TextView dateText;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
+    @BindView(R.id.progress)
+    LinearLayout progressBar;
     @BindView(R.id.hotel_recycler)
     RecyclerView hotelRecycler;
     @BindView(R.id.search)

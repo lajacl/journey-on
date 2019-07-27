@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,8 +33,8 @@ public class DestinationFragment extends Fragment {
 
     @BindView(R.id.destination_header)
     TextView header;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
+    @BindView(R.id.progress)
+    LinearLayout progressBar;
     @BindView(R.id.destination_recycler)
     RecyclerView destinationRecycler;
 

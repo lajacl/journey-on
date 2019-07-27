@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,8 +42,8 @@ public class SightsFragment extends Fragment implements ResponseListener.Sights 
     CardView filterCard;
     @BindView(R.id.location)
     TextView locationText;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
+    @BindView(R.id.progress)
+    LinearLayout progressBar;
     @BindView(R.id.sight_recycler)
     RecyclerView sightRecycler;
     @BindView(R.id.search)
@@ -151,7 +151,7 @@ public class SightsFragment extends Fragment implements ResponseListener.Sights 
 
     @Override
     public void onResponseReceive(List<PointOfInterest> pointsOfInterest) {
-        if(trip.getSights() == null || pointsOfInterest.size() > trip.getSights().size()) {
+        if (trip.getSights() == null || pointsOfInterest.size() > trip.getSights().size()) {
             Toast.makeText(context, "Sight Selected", Toast.LENGTH_SHORT).show();
         }
         trip.setSights(pointsOfInterest);

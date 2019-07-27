@@ -17,7 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,8 +73,8 @@ public class FlightsFragment extends Fragment implements AdapterView.OnItemSelec
     TextView dateTextView;
     @BindView(R.id.search)
     Button searchBtn;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
+    @BindView(R.id.progress)
+    LinearLayout progressBar;
     @BindView(R.id.flight_recycler)
     RecyclerView flightRecycler;
     @BindView(R.id.next_btn)

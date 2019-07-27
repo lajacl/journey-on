@@ -27,7 +27,6 @@
                 <TextView
                     style="@style/OptionText"
                     android:drawableStart="@drawable/ic_flight"
-                    android:drawableTint="@color/colorAccent"
                     android:text="@string/flight" />
 
                 <CheckBox
@@ -46,7 +45,6 @@
                 <TextView
                     style="@style/OptionText"
                     android:drawableStart="@drawable/ic_hotel"
-                    android:drawableTint="@color/colorAccent"
                     android:text="@string/hotel" />
 
                 <CheckBox
@@ -65,7 +63,6 @@
                 <TextView
                     style="@style/OptionText"
                     android:drawableStart="@drawable/ic_place"
-                    android:drawableTint="@color/colorAccent"
                     android:text="@string/sights" />
 
                 <CheckBox
@@ -157,8 +154,7 @@
                     <ImageView
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_navigate_next"
-                        android:tint="@color/colorPrimary" />
+                        android:src="@drawable/ic_navigate_next" />
 
                 </LinearLayout>
 

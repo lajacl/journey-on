@@ -50,10 +50,8 @@ public class TripListFragment extends Fragment {
         if(tripList == null || tripList.isEmpty()) {
             message.setText(R.string.no_trips);
         } else {
-            message.setText(String.format(Locale.getDefault(), "You have %d saved trips\n%s", tripList.size(), message.getText()));
+            message.setText(String.format(Locale.getDefault(), "You have %d saved trips\n\n%s", tripList.size(), message.getText()));
         }
-        Log.i(TAG, tripList.size() + " Trips Saved:\n" + tripList.toString());
-        Toast.makeText(context, R.string.trip_saved, Toast.LENGTH_SHORT).show();
     }
 
     @Override

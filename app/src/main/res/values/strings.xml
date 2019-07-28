@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">Translated Travel</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_inspiration">Inspiration</string>
     <string name="title_search">Search</string>
     <string name="title_trips">Trips</string>
     <string name="title_profile">Profile</string>
@@ -74,5 +74,9 @@
     <string name="progress_flights">Soon you\'ll be flying high\non cloud 9</string>
     <string name="progress_hotels">Taking a brief nap&#8230;\nmaking sure the mattress is just right\nfor you</string>
     <string name="progress_sights">You deserve to experience nothing but the best</string>
+
+    <string name="header_trips">Time for a trip?</string>
+    <string name="no_trips">Oh no you need to find some first</string>
+    <string name="trip_no_show">Unable to display saved trips at the moment</string>
 
 </resources>

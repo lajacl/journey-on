@@ -32,18 +32,19 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.view.View.GONE;
+
 public class TripFragment extends Fragment {
     private static final String TAG = "TripFragment";
     private static final String ARG_TRIP = "trip";
     private static final String DELIMITER = ", ";
-    private static TripPrefs tripPrefs;
     private Context context;
+    private static TripPrefs tripPrefs;
     private Trip trip;
     private HashMap<String, Airline> airlineMap = new HashMap<>();
 
@@ -118,8 +119,7 @@ public class TripFragment extends Fragment {
             trip.setSaveDate(Calendar.getInstance());
             tripPrefs.saveTrip(trip);
             Toast.makeText(context, R.string.trip_saved, Toast.LENGTH_SHORT).show();
-            List tripList = tripPrefs.getTrips();
-            Log.i(TAG, tripList.size() + " Trips Saved:\n" + tripList.toString());
+            saveBtn.setVisibility(GONE);
         });
     }
 
@@ -127,22 +127,22 @@ public class TripFragment extends Fragment {
         if (trip.getFlight() != null) {
             showFlight();
         } else {
-            flightLabel.setVisibility(View.GONE);
-            flightCard.setVisibility(View.GONE);
+            flightLabel.setVisibility(GONE);
+            flightCard.setVisibility(GONE);
         }
 
         if (trip.getHotel() != null) {
             showHotel();
         } else {
-            hotelLabel.setVisibility(View.GONE);
-            hotelCard.setVisibility(View.GONE);
+            hotelLabel.setVisibility(GONE);
+            hotelCard.setVisibility(GONE);
         }
 
         if (trip.getSights() != null && trip.getSights().size() > 0) {
             showSights();
         } else {
-            sightsLabel.setVisibility(View.GONE);
-            sightsLayout.setVisibility(View.GONE);
+            sightsLabel.setVisibility(GONE);
+            sightsLayout.setVisibility(GONE);
         }
     }
 

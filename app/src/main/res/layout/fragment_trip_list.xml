@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/FragmentRoot"
+    android:orientation="vertical"
     tools:context=".fragment.TripListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        style="@style/Header"
+        android:text="@string/header_trips" />
 
-</FrameLayout>
+    <android.support.v7.widget.CardView style="@style/CardItem">
+
+        <TextView
+            android:id="@+id/trip_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:text="@string/trip_no_show"
+            android:textSize="18sp" />
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

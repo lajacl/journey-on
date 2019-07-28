@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_dashboard"
+        android:id="@+id/menu_inspiration"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard"/>
+        android:title="@string/title_inspiration"/>
 
     <item
         android:id="@+id/menu_search"

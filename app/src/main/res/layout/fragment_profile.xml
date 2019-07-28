@@ -19,7 +19,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/profile_name"
+                android:textAllCaps="true"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -27,14 +30,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_edit"
-                android:drawableTint="@color/colorAccent"
                 tools:text="Love" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/profile_origin"
+                android:textAllCaps="true"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
 
@@ -47,8 +51,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/profile_currency"
+                android:textAllCaps="true"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
 
@@ -62,7 +68,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/profile_wishlist"
+                android:textAllCaps="true"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
 
@@ -70,9 +79,7 @@
                 android:id="@+id/user_wishlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:drawableEnd="@drawable/ic_edit"
-                android:drawableTint="@color/colorAccent"
                 android:hint="@string/hint_wishlist_locations" />
 
             <Button

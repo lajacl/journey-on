@@ -15,6 +15,7 @@ import com.google.android.libraries.places.api.Places;
 import com.lovelylavette.android.fragment.DestinationFragment;
 import com.lovelylavette.android.fragment.ProfileFragment;
 import com.lovelylavette.android.fragment.SearchFragment;
+import com.lovelylavette.android.fragment.TripListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction ft = fragmentManager.beginTransaction();
 
             switch (item.getItemId()) {
-                case R.id.menu_dashboard:
+                case R.id.menu_inspiration:
                     ft.replace(R.id.frag_container, new DestinationFragment())
                             .commit();
                     return true;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
                             .commit();
                     return true;
                 case R.id.menu_trips:
+                    ft.replace(R.id.frag_container, new TripListFragment())
+                            .commit();
                     return true;
                 case R.id.menu_profile:
                     ft.replace(R.id.frag_container, new ProfileFragment())
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private void resetNav() {
         Fragment fragment = fragmentManager.findFragmentById(R.id.frag_container);
         if (fragment == null) {
-            navView.setSelectedItemId(R.id.menu_search);
+            navView.setSelectedItemId(R.id.menu_inspiration);
         }
     }
 
